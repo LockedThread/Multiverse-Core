@@ -9,14 +9,7 @@ package com.onarandombox.MultiverseCore.api;
 
 import com.onarandombox.MultiverseCore.enums.AllowedPortalType;
 import com.onarandombox.MultiverseCore.exceptions.PropertyDoesNotExistException;
-import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldType;
-import org.bukkit.command.CommandSender;
+import org.bukkit.*;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +76,7 @@ public interface MultiverseWorld {
      *
      * @param difficulty The difficulty to set the world to as a string.
      * @return True if success, false if the provided string
-     *         could not be translated to a difficulty.
+     * could not be translated to a difficulty.
      * @deprecated Use {@link #setDifficulty(Difficulty)} or, if you have to
      * pass a string, use {@link #setPropertyValue(String, String)} instead.
      */
@@ -130,6 +123,7 @@ public interface MultiverseWorld {
 
     /**
      * Gets the help-message for a property.
+     *
      * @param property The name of the property.
      * @return The help-message.
      * @throws PropertyDoesNotExistException Thrown if the property was not found.
@@ -200,6 +194,7 @@ public interface MultiverseWorld {
     // end of old config stuff
 
     // permission stuff
+
     /**
      * Gets the lowercased name of the world. This method is required, since the permissables
      * lowercase all permissions when recalculating.
@@ -278,7 +273,6 @@ public interface MultiverseWorld {
      *
      * @param color A string that may translate to a color.
      * @return True if it is a color, false if not.
-     *
      * @deprecated This has been moved: {@link com.onarandombox.MultiverseCore.enums.EnglishChatColor#isValidAliasColor(String)}
      */
     @Deprecated
@@ -292,6 +286,7 @@ public interface MultiverseWorld {
     String getColoredWorldString();
 
     // animals&monster stuff
+
     /**
      * Gets whether or not animals are allowed to spawn in this world.
      *
@@ -594,14 +589,6 @@ public interface MultiverseWorld {
     void setBedRespawn(boolean autoLoad);
 
     /**
-     * Sets the player limit for this world after which players without an override
-     * permission node will not be allowed in. A value of -1 or less signifies no limit
-     *
-     * @param limit The new limit
-     */
-    void setPlayerLimit(int limit);
-
-    /**
      * Gets the player limit for this world after which players without an override
      * permission node will not be allowed in. A value of -1 or less signifies no limit
      *
@@ -610,7 +597,16 @@ public interface MultiverseWorld {
     int getPlayerLimit();
 
     /**
+     * Sets the player limit for this world after which players without an override
+     * permission node will not be allowed in. A value of -1 or less signifies no limit
+     *
+     * @param limit The new limit
+     */
+    void setPlayerLimit(int limit);
+
+    /**
      * Same as {@link #getTime()}, but returns a string.
+     *
      * @return The time as a short string: 12:34pm
      */
     String getTime();
@@ -620,8 +616,8 @@ public interface MultiverseWorld {
      * <p>
      * This method will take the following formats:
      * 11:37am
-     *  4:30p
-     *  day(morning), night, noon, midnight
+     * 4:30p
+     * day(morning), night, noon, midnight
      *
      * @param timeAsString The formatted time to set the world to.
      * @return True if the time was set, false if not.
@@ -643,6 +639,7 @@ public interface MultiverseWorld {
     AllowedPortalType getAllowedPortals();
 
     // properties that are not "getter+setter" style
+
     /**
      * Gets a list of all the worlds that players CANNOT travel to from this world,
      * regardless of their access permissions.

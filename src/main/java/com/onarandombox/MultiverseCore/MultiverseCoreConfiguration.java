@@ -1,42 +1,18 @@
 package com.onarandombox.MultiverseCore;
 
-import com.dumptruckman.minecraft.util.*;
-import com.onarandombox.MultiverseCore.api.*;
-import me.main__.util.SerializationConfig.*;
+import com.dumptruckman.minecraft.util.Logging;
+import com.onarandombox.MultiverseCore.api.MultiverseCoreConfig;
+import me.main__.util.SerializationConfig.NoSuchPropertyException;
+import me.main__.util.SerializationConfig.Property;
+import me.main__.util.SerializationConfig.SerializationConfig;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * Our configuration.
  */
 public class MultiverseCoreConfiguration extends SerializationConfig implements MultiverseCoreConfig {
     private static MultiverseCoreConfiguration instance;
-
-    /**
-     * Sets the statically saved instance.
-     * @param instance The new instance.
-     */
-    public static void setInstance(MultiverseCoreConfiguration instance) {
-        MultiverseCoreConfiguration.instance = instance;
-    }
-
-    /**
-     * @return True if the static instance of config is set.
-     */
-    public static boolean isSet() {
-        return instance != null;
-    }
-
-    /**
-     * Gets the statically saved instance.
-     * @return The statically saved instance.
-     */
-    public static MultiverseCoreConfiguration getInstance() {
-        if (instance == null)
-            throw new IllegalStateException("The instance wasn't set!");
-        return instance;
-    }
-
     @Property
     private volatile boolean enforceaccess;
     @Property
@@ -69,15 +45,40 @@ public class MultiverseCoreConfiguration extends SerializationConfig implements 
     private volatile int portalsearchradius;
     @Property
     private volatile boolean autopurge;
-
     public MultiverseCoreConfiguration() {
         super();
         MultiverseCoreConfiguration.setInstance(this);
     }
-
     public MultiverseCoreConfiguration(Map<String, Object> values) {
         super(values);
         MultiverseCoreConfiguration.setInstance(this);
+    }
+
+    /**
+     * @return True if the static instance of config is set.
+     */
+    public static boolean isSet() {
+        return instance != null;
+    }
+
+    /**
+     * Gets the statically saved instance.
+     *
+     * @return The statically saved instance.
+     */
+    public static MultiverseCoreConfiguration getInstance() {
+        if (instance == null)
+            throw new IllegalStateException("The instance wasn't set!");
+        return instance;
+    }
+
+    /**
+     * Sets the statically saved instance.
+     *
+     * @param instance The new instance.
+     */
+    public static void setInstance(MultiverseCoreConfiguration instance) {
+        MultiverseCoreConfiguration.instance = instance;
     }
 
     /**
@@ -149,7 +150,7 @@ public class MultiverseCoreConfiguration extends SerializationConfig implements 
     public void setPrefixChat(boolean prefixChat) {
         this.prefixchat = prefixChat;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -296,24 +297,24 @@ public class MultiverseCoreConfiguration extends SerializationConfig implements 
     }
 
     @Override
+    public boolean getUseAsyncChat() {
+        return this.useasyncchat;
+    }
+
+    @Override
     public void setUseAsyncChat(boolean useAsyncChat) {
         this.useasyncchat = useAsyncChat;
     }
 
     @Override
-    public boolean getUseAsyncChat() {
-        return this.useasyncchat;
+    public boolean getSilentStart() {
+        return silentstart;
     }
 
     @Override
     public void setSilentStart(boolean silentStart) {
         Logging.setShowingConfig(!silentStart);
         this.silentstart = silentStart;
-    }
-
-    @Override
-    public boolean getSilentStart() {
-        return silentstart;
     }
 
     @Override
@@ -327,13 +328,13 @@ public class MultiverseCoreConfiguration extends SerializationConfig implements 
     }
 
     @Override
-    public void setPortalSearchRadius(int searchRadius) {
-        this.portalsearchradius = searchRadius;
+    public int getPortalSearchRadius() {
+        return portalsearchradius;
     }
 
     @Override
-    public int getPortalSearchRadius() {
-        return portalsearchradius;
+    public void setPortalSearchRadius(int searchRadius) {
+        this.portalsearchradius = searchRadius;
     }
 
     @Override

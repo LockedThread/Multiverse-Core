@@ -27,9 +27,7 @@ import java.util.Map;
  */
 @Deprecated
 public class LocationManipulation {
-    private LocationManipulation() { }
-
-    private static Map<String, Integer> orientationInts = new HashMap<String, Integer>();
+    private static Map<String, Integer> orientationInts = new HashMap<>();
 
     static {
         // BEGIN CHECKSTYLE-SUPPRESSION: MagicNumberCheck
@@ -45,6 +43,9 @@ public class LocationManipulation {
         // "freeze" the map:
         orientationInts = Collections.unmodifiableMap(orientationInts);
         // END CHECKSTYLE-SUPPRESSION: MagicNumberCheck
+    }
+
+    private LocationManipulation() {
     }
 
     /**
@@ -239,7 +240,7 @@ public class LocationManipulation {
     /**
      * Returns a translated vector from the given direction.
      *
-     * @param v The old {@link Vector}
+     * @param v         The old {@link Vector}
      * @param direction The new direction
      * @return The translated {@link Vector}
      */

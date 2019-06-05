@@ -1,13 +1,12 @@
 package com.onarandombox.MultiverseCore.configuration;
 
+import me.main__.util.SerializationConfig.Property;
+import me.main__.util.SerializationConfig.SerializationConfig;
+import org.bukkit.configuration.serialization.SerializableAs;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import me.main__.util.SerializationConfig.Property;
-import me.main__.util.SerializationConfig.SerializationConfig;
-
-import org.bukkit.configuration.serialization.SerializableAs;
 
 /**
  * SpawnSubSettings.
@@ -35,7 +34,7 @@ public class SubSpawnSettings extends SerializationConfig {
     @Override
     public void setDefaults() {
         spawn = true;
-        exceptions = new ArrayList<String>();
+        exceptions = new ArrayList<>();
         spawnrate = -1;
     }
 
@@ -61,16 +60,16 @@ public class SubSpawnSettings extends SerializationConfig {
     }
 
     /**
-     * @param rate The new spawn rate
-     */
-    public void setSpawnRate(int rate) {
-        this.spawnrate = rate;
-    }
-
-    /**
      * @return The spawn rate
      */
     public int getSpawnRate() {
         return this.spawnrate;
+    }
+
+    /**
+     * @param rate The new spawn rate
+     */
+    public void setSpawnRate(int rate) {
+        this.spawnrate = rate;
     }
 }

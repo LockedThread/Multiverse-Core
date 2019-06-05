@@ -113,12 +113,6 @@ commands:
             /<command> [world]
             /<command> -- Shows the relevant coordinates in your current world.
             /<command> creative -- Shows the relevant coordinates if you were in the 'creative' world.
-  mvc:
-    description: Display World, Coordinates, Direction & Compression for a world.
-    usage: |
-            /<command> [world]
-            /<command> -- Shows the relevant coordinates in your current world.
-            /<command> creative -- Shows the relevant coordinates if you were in the 'creative' world.
   mvwho:
     description: Display online users per world.
     usage: |

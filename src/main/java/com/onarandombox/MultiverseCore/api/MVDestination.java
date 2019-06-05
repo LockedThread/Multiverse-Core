@@ -39,7 +39,6 @@ public interface MVDestination {
      *
      * @param plugin      The plugin who the type belongs to.
      * @param destination The destination string. ex: p:MyPortal:nw
-     *
      * @return True if the destination is valid, false if not.
      */
     boolean isThisType(JavaPlugin plugin, String destination);
@@ -54,7 +53,6 @@ public interface MVDestination {
      * Do not forget to use {@link #getVelocity()} as destinations can use this too!
      *
      * @param entity The entity to be teleported.
-     *
      * @return The location of the entity.
      */
     Location getLocation(Entity entity);

@@ -1,10 +1,9 @@
 package com.onarandombox.MultiverseCore.api;
 
+import com.onarandombox.MultiverseCore.enums.TeleportResult;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-
-import com.onarandombox.MultiverseCore.enums.TeleportResult;
 
 /**
  * Used to safely teleport people.
@@ -13,6 +12,7 @@ public interface SafeTTeleporter extends Teleporter {
 
     /**
      * Gets the next safe location around the given location.
+     *
      * @param l A {@link Location}.
      * @return A safe {@link Location}.
      */
@@ -20,9 +20,10 @@ public interface SafeTTeleporter extends Teleporter {
 
     /**
      * Gets the next safe location around the given location.
-     * @param l A {@link Location}.
+     *
+     * @param l         A {@link Location}.
      * @param tolerance The tolerance.
-     * @param radius The radius.
+     * @param radius    The radius.
      * @return A safe {@link Location}.
      */
     Location getSafeLocation(Location l, int tolerance, int radius);
@@ -50,7 +51,7 @@ public interface SafeTTeleporter extends Teleporter {
      * @return true for success, false for failure.
      */
     TeleportResult safelyTeleport(CommandSender teleporter, Entity teleportee, Location location,
-            boolean safely);
+                                  boolean safely);
 
     /**
      * Returns a safe location for the entity to spawn at.
@@ -63,6 +64,7 @@ public interface SafeTTeleporter extends Teleporter {
 
     /**
      * Finds a portal-block next to the specified {@link Location}.
+     *
      * @param l The {@link Location}
      * @return The next portal-block's {@link Location}.
      */

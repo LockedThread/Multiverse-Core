@@ -48,7 +48,7 @@ public class FileUtils {
      * @return true if the contents were successfully deleted
      */
     public static boolean deleteFolderContents(File file) {
-        try (Stream<Path> files = Files.walk(file.toPath())){
+        try (Stream<Path> files = Files.walk(file.toPath())) {
             files.sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
                     .filter(f -> !f.equals(file))
@@ -62,10 +62,10 @@ public class FileUtils {
 
     /**
      * Helper method to copy the world-folder.
+     *
      * @param source Source-File
      * @param target Target-File
-     * @param log A logger that logs the operation
-     *
+     * @param log    A logger that logs the operation
      * @return if it had success
      */
     public static boolean copyFolder(File source, File target, Logger log) {

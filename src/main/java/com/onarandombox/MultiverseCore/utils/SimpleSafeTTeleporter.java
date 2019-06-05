@@ -8,11 +8,10 @@
 package com.onarandombox.MultiverseCore.utils;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.SafeTTeleporter;
 import com.onarandombox.MultiverseCore.api.MVDestination;
+import com.onarandombox.MultiverseCore.api.SafeTTeleporter;
 import com.onarandombox.MultiverseCore.destination.InvalidDestination;
 import com.onarandombox.MultiverseCore.enums.TeleportResult;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,14 +29,32 @@ import java.util.logging.Level;
  * The default-implementation of {@link SafeTTeleporter}.
  */
 public class SimpleSafeTTeleporter implements SafeTTeleporter {
-    private MultiverseCore plugin;
-
+    private static final int DEFAULT_TOLERANCE = 6;
+    private static final int DEFAULT_RADIUS = 9;
+    private final MultiverseCore plugin;
     public SimpleSafeTTeleporter(MultiverseCore plugin) {
         this.plugin = plugin;
     }
 
-    private static final int DEFAULT_TOLERANCE = 6;
-    private static final int DEFAULT_RADIUS = 9;
+    private static Location getCloserBlock(Location source, Location blockA, Location blockB) {
+        // If B wasn't given, return a.
+        if (blockB == null) {
+            return blockA;
+        }
+        // Center our calculations
+        blockA.add(.5, 0, .5);
+        blockB.add(.5, 0, .5);
+
+        // Retrieve the distance to the normalized blocks
+        double testA = source.distance(blockA);
+        double testB = source.distance(blockB);
+
+        // Compare and return
+        if (testA <= testB) {
+            return blockA;
+        }
+        return blockB;
+    }
 
     /**
      * {@inheritDoc}
@@ -292,42 +309,22 @@ public class SimpleSafeTTeleporter implements SafeTTeleporter {
     public Location findPortalBlockNextTo(Location l) {
         Block b = l.getWorld().getBlockAt(l);
         Location foundLocation = null;
-        if (b.getType() == Material.NETHER_PORTAL) {
+        if (b.getType() == Material.PORTAL) {
             return l;
         }
-        if (b.getRelative(BlockFace.NORTH).getType() == Material.NETHER_PORTAL) {
+        if (b.getRelative(BlockFace.NORTH).getType() == Material.PORTAL) {
             foundLocation = getCloserBlock(l, b.getRelative(BlockFace.NORTH).getLocation(), foundLocation);
         }
-        if (b.getRelative(BlockFace.SOUTH).getType() == Material.NETHER_PORTAL) {
+        if (b.getRelative(BlockFace.SOUTH).getType() == Material.PORTAL) {
             foundLocation = getCloserBlock(l, b.getRelative(BlockFace.SOUTH).getLocation(), foundLocation);
         }
-        if (b.getRelative(BlockFace.EAST).getType() == Material.NETHER_PORTAL) {
+        if (b.getRelative(BlockFace.EAST).getType() == Material.PORTAL) {
             foundLocation = getCloserBlock(l, b.getRelative(BlockFace.EAST).getLocation(), foundLocation);
         }
-        if (b.getRelative(BlockFace.WEST).getType() == Material.NETHER_PORTAL) {
+        if (b.getRelative(BlockFace.WEST).getType() == Material.PORTAL) {
             foundLocation = getCloserBlock(l, b.getRelative(BlockFace.WEST).getLocation(), foundLocation);
         }
         return foundLocation;
-    }
-
-    private static Location getCloserBlock(Location source, Location blockA, Location blockB) {
-        // If B wasn't given, return a.
-        if (blockB == null) {
-            return blockA;
-        }
-        // Center our calculations
-        blockA.add(.5, 0, .5);
-        blockB.add(.5, 0, .5);
-
-        // Retrieve the distance to the normalized blocks
-        double testA = source.distance(blockA);
-        double testB = source.distance(blockB);
-
-        // Compare and return
-        if (testA <= testB) {
-            return blockA;
-        }
-        return blockB;
     }
 
     @Override

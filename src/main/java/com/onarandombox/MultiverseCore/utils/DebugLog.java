@@ -13,17 +13,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * The Multiverse debug-logger.
+ *
  * @deprecated Deprecated in favor of new Logging lib.  See {@link com.dumptruckman.minecraft.util.Logging}.
  */
 @Deprecated
@@ -43,22 +37,21 @@ public class DebugLog extends Logger {
         try {
             this.fh = new FileHandler(file, true);
             this.setUseParentHandlers(false);
-            List<Handler> toRemove = Arrays.asList(this.getHandlers());
+            Handler[] toRemove = this.getHandlers();
             for (Handler handler : toRemove) {
                 this.removeHandler(handler);
             }
             this.addHandler(this.fh);
             this.setLevel(Level.ALL);
             this.fh.setFormatter(new LogFormatter());
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SecurityException | IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Sets the log-tag.
+     *
      * @param tag The new tag.
      */
     public void setTag(String tag) {
@@ -78,7 +71,7 @@ public class DebugLog extends Logger {
      * Log a message at a certain level.
      *
      * @param level The log-{@link Level}.
-     * @param msg the message.
+     * @param msg   the message.
      */
     @Override
     public void log(final Level level, final String msg) {
@@ -90,6 +83,13 @@ public class DebugLog extends Logger {
 
             super.log(level, prefix + msg);
         }
+    }
+
+    /**
+     * Closes this {@link DebugLog}.
+     */
+    public void close() {
+        this.fh.close();
     }
 
     /**
@@ -118,12 +118,5 @@ public class DebugLog extends Logger {
 
             return builder.toString();
         }
-    }
-
-    /**
-     * Closes this {@link DebugLog}.
-     */
-    public void close() {
-        this.fh.close();
     }
 }

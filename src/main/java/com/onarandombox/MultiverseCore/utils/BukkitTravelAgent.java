@@ -1,26 +1,18 @@
 package com.onarandombox.MultiverseCore.utils;
 
-import java.util.logging.Level;
-
 import com.onarandombox.MultiverseCore.api.SafeTTeleporter;
 import com.onarandombox.MultiverseCore.destination.CannonDestination;
 import org.bukkit.Location;
 import org.bukkit.TravelAgent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
+import java.util.logging.Level;
+
 public class BukkitTravelAgent implements TravelAgent {
     private final MVTravelAgent agent;
 
     public BukkitTravelAgent(MVTravelAgent agent) {
         this.agent = agent;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BukkitTravelAgent setSearchRadius(int radius) {
-        return this;
     }
 
     /**
@@ -35,7 +27,7 @@ public class BukkitTravelAgent implements TravelAgent {
      * {@inheritDoc}
      */
     @Override
-    public BukkitTravelAgent setCreationRadius(int radius) {
+    public BukkitTravelAgent setSearchRadius(int radius) {
         return this;
     }
 
@@ -45,6 +37,14 @@ public class BukkitTravelAgent implements TravelAgent {
     @Override
     public int getCreationRadius() {
         return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BukkitTravelAgent setCreationRadius(int radius) {
+        return this;
     }
 
     /**

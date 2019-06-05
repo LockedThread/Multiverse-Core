@@ -19,15 +19,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** A factory class that will create destinations from specific strings. */
+/**
+ * A factory class that will create destinations from specific strings.
+ */
 public class DestinationFactory {
-    private MultiverseCore plugin;
-    private Map<String, Class<? extends MVDestination>> destList;
+    private final MultiverseCore plugin;
+    private final Map<String, Class<? extends MVDestination>> destList;
     private Command teleportCommand;
 
     public DestinationFactory(MultiverseCore plugin) {
         this.plugin = plugin;
-        this.destList = new HashMap<String, Class<? extends MVDestination>>();
+        this.destList = new HashMap<>();
         List<Command> cmds = this.plugin.getCommandHandler().getAllCommands();
         for (Command c : cmds) {
             if (c instanceof TeleportCommand) {
@@ -41,7 +43,6 @@ public class DestinationFactory {
      * Returns a new InvalidDestination if the string could not be parsed.
      *
      * @param destination The destination in string format.
-     *
      * @return A non-null MVDestination
      */
     public MVDestination getDestination(String destination) {
@@ -59,8 +60,7 @@ public class DestinationFactory {
                 }
                 mydest.setDestination(this.plugin, destination);
                 return mydest;
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException ignored) {
             }
         }
         return new InvalidDestination();
@@ -69,7 +69,7 @@ public class DestinationFactory {
     /**
      * Registers a {@link MVDestination}.
      *
-     * @param c The {@link Class} of the {@link MVDestination} to register.
+     * @param c          The {@link Class} of the {@link MVDestination} to register.
      * @param identifier The {@link String}-identifier.
      * @return True if the class was successfully registered.
      */

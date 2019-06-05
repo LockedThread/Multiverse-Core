@@ -20,10 +20,20 @@ import org.bukkit.util.Vector;
  * A world-{@link MVDestination}.
  */
 public class WorldDestination implements MVDestination {
+    private final String direction = "";
     private boolean isValid;
     private MultiverseWorld world;
     private float yaw = -1;
-    private String direction = "";
+
+    private static Location getAcurateSpawnLocation(Entity e, MultiverseWorld world) {
+        if (world != null) {
+            return world.getSpawnLocation();
+        } else {
+            // add 0.5 to x and z to center people
+            // (spawn location is stored as int meaning that you would spawn in the corner of a block)
+            return e.getWorld().getSpawnLocation().add(.5, 0, .5);
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -46,15 +56,13 @@ public class WorldDestination implements MVDestination {
             // This case is: world
             return true;
         }
+        // This case is: w:world
+        // and w:world:ne
         if (items.length == 2 && ((MultiverseCore) plugin).getMVWorldManager().isMVWorld(items[0])) {
             // This case is: world:n
             return true;
-        } else if (items[0].equalsIgnoreCase("w") && ((MultiverseCore) plugin).getMVWorldManager().isMVWorld(items[1])) {
-            // This case is: w:world
-            // and w:world:ne
-            return true;
-        }
-        return false;
+        } else
+            return items[0].equalsIgnoreCase("w") && ((MultiverseCore) plugin).getMVWorldManager().isMVWorld(items[1]);
     }
 
     /**
@@ -68,16 +76,6 @@ public class WorldDestination implements MVDestination {
             spawnLoc.setYaw(this.yaw);
         }
         return spawnLoc;
-    }
-
-    private static Location getAcurateSpawnLocation(Entity e, MultiverseWorld world) {
-        if (world != null) {
-            return world.getSpawnLocation();
-        } else {
-            // add 0.5 to x and z to center people
-            // (spawn location is stored as int meaning that you would spawn in the corner of a block)
-            return e.getWorld().getSpawnLocation().add(.5, 0, .5);
-        }
     }
 
     /**

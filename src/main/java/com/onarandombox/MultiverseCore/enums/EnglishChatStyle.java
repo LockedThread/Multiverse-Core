@@ -4,11 +4,14 @@ import org.bukkit.ChatColor;
 
 /**
  * A regular {@link ChatColor} represented by an english string.
+ *
  * @see ChatColor
  */
 public enum EnglishChatStyle {
     // BEGIN CHECKSTYLE-SUPPRESSION: JavadocVariable
-    /** No style. */
+    /**
+     * No style.
+     */
     NORMAL(null),
     MAGIC(ChatColor.MAGIC),
     BOLD(ChatColor.BOLD),
@@ -24,15 +27,8 @@ public enum EnglishChatStyle {
     }
 
     /**
-     * Gets the color.
-     * @return The color as {@link ChatColor}.
-     */
-    public ChatColor getColor() {
-        return color;
-    }
-
-    /**
      * Constructs an {@link EnglishChatStyle} from a {@link String}.
+     *
      * @param text The {@link String}.
      * @return The {@link EnglishChatStyle}.
      */
@@ -45,5 +41,14 @@ public enum EnglishChatStyle {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets the color.
+     *
+     * @return The color as {@link ChatColor}.
+     */
+    public ChatColor getColor() {
+        return color;
     }
 }

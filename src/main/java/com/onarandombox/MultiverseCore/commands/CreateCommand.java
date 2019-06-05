@@ -26,7 +26,7 @@ import java.util.List;
  * Creates a new world and loads it.
  */
 public class CreateCommand extends MultiverseCommand {
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public CreateCommand(MultiverseCore plugin) {
         super(plugin);
@@ -98,7 +98,7 @@ public class CreateCommand extends MultiverseCommand {
         }
         // Determine if the generator is valid. #918
         if (generator != null) {
-            List<String> genarray = new ArrayList<String>(Arrays.asList(generator.split(":")));
+            List<String> genarray = new ArrayList<>(Arrays.asList(generator.split(":")));
             if (genarray.size() < 2) {
                 // If there was only one arg specified, pad with another empty one.
                 genarray.add("");

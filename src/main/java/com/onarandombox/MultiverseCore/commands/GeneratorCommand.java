@@ -39,22 +39,22 @@ public class GeneratorCommand extends MultiverseCommand {
     public void runCommand(CommandSender sender, List<String> args) {
         Logging.info("PLEASE IGNORE the 'Plugin X does not contain any generators' message below!");
         Plugin[] plugins = this.plugin.getServer().getPluginManager().getPlugins();
-        List<String> generators = new ArrayList<String>();
+        List<String> generators = new ArrayList<>();
         for (Plugin p : plugins) {
             if (p.isEnabled() && p.getDefaultWorldGenerator("world", "") != null) {
                 generators.add(p.getDescription().getName());
             }
         }
         sender.sendMessage(ChatColor.AQUA + "--- Loaded Generator Plugins ---");
-        String loadedGens = "";
+        StringBuilder loadedGens = new StringBuilder();
         boolean altColor = false;
         for (String s : generators) {
-            loadedGens += (altColor ? ChatColor.YELLOW : ChatColor.WHITE) + s + " ";
+            loadedGens.append(altColor ? ChatColor.YELLOW : ChatColor.WHITE).append(s).append(" ");
             altColor = !altColor;
         }
         if (loadedGens.length() == 0) {
-            loadedGens = ChatColor.RED + "No Generator Plugins found.";
+            loadedGens = new StringBuilder(ChatColor.RED + "No Generator Plugins found.");
         }
-        sender.sendMessage(loadedGens);
+        sender.sendMessage(loadedGens.toString());
     }
 }

@@ -36,7 +36,6 @@ public class SleepCommand extends MultiverseCommand {
         }
 
         if (p == null) {
-            return;
         }
     }
 }

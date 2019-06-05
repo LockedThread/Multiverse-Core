@@ -5,6 +5,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 /**
  * A wrapper for the {@link PlayerChatEvent}.
+ *
  * @deprecated This is deprecated like the {@link PlayerChatEvent}.
  */
 @Deprecated

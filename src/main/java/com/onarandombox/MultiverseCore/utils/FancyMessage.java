@@ -13,18 +13,18 @@ import com.onarandombox.MultiverseCore.api.FancyText;
  * A colored text-message.
  */
 public class FancyMessage implements FancyText {
-    private String title;
-    private String message;
+    private final String title;
+    private final String message;
+    private final FancyColorScheme colors;
     private boolean main = true;
-    private FancyColorScheme colors;
 
     /**
      * Allows easy creation of an alternating colored list.
      * TODO: Documentation! Why does CheckStyle just ignore this?
      *
-     * @param title The title.
+     * @param title   The title.
      * @param message The body of the message.
-     * @param scheme The color scheme to use for easy styling.
+     * @param scheme  The color scheme to use for easy styling.
      */
     public FancyMessage(String title, String message, FancyColorScheme scheme) {
         this.title = title;
@@ -53,6 +53,7 @@ public class FancyMessage implements FancyText {
 
     /**
      * Specifies whether this {@link FancyMessage} should use the alt-color.
+     *
      * @param altColor Whether this {@link FancyMessage} should use the alt-color.
      */
     public void setAltColor(boolean altColor) {
@@ -61,6 +62,7 @@ public class FancyMessage implements FancyText {
 
     /**
      * Specifies whether this {@link FancyMessage} should use the main-color.
+     *
      * @param mainColor Whether this {@link FancyMessage} should use the main-color.
      */
     public void setMainColor(boolean mainColor) {

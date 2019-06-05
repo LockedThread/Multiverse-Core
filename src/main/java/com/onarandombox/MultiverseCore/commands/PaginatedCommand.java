@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * A generic paginated command.
+ *
  * @param <T> The type of items on the page.
  */
 public abstract class PaginatedCommand<T> extends Command {
@@ -40,8 +41,9 @@ public abstract class PaginatedCommand<T> extends Command {
 
     /**
      * Gets filtered items.
+     *
      * @param availableItems All available items.
-     * @param filter The filter-{@link String}.
+     * @param filter         The filter-{@link String}.
      * @return A list of items that match the filter.
      */
     protected abstract List<T> getFilteredItems(List<T> availableItems, String filter);
@@ -64,9 +66,9 @@ public abstract class PaginatedCommand<T> extends Command {
     /**
      * Shows a page.
      *
-     * @param page The number of the page to show.
+     * @param page   The number of the page to show.
      * @param sender The {@link CommandSender} that wants to see the page.
-     * @param cmds The items that should be displayed on the page.
+     * @param cmds   The items that should be displayed on the page.
      */
     protected void showPage(int page, CommandSender sender, List<T> cmds) {
         // Ensure the page is at least 1.
@@ -128,8 +130,8 @@ public abstract class PaginatedCommand<T> extends Command {
      * "Key-Object" containing information about the page and the filter that were requested.
      */
     protected class FilterObject {
+        private final String filter;
         private Integer page;
-        private String filter;
 
         public FilterObject(Integer page, String filter) {
             this.page = page;
@@ -138,6 +140,7 @@ public abstract class PaginatedCommand<T> extends Command {
 
         /**
          * Gets the page.
+         *
          * @return The page.
          */
         public Integer getPage() {
@@ -155,6 +158,7 @@ public abstract class PaginatedCommand<T> extends Command {
 
         /**
          * Gets the filter.
+         *
          * @return The filter.
          */
         public String getFilter() {

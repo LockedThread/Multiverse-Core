@@ -1,19 +1,18 @@
 package com.onarandombox.MultiverseCore.event;
 
+import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import org.bukkit.event.HandlerList;
 
 /**
  * Called when a world is about to be deleted by Multiverse.
  */
 public class MVWorldDeleteEvent extends Event implements Cancellable {
-    private boolean cancelled = false;
-
+    private static final HandlerList HANDLERS = new HandlerList();
     private final MultiverseWorld world;
     private final boolean removeFromConfig;
+    private boolean cancelled = false;
 
     public MVWorldDeleteEvent(MultiverseWorld world, boolean removeFromConfig) {
         if (world == null)
@@ -23,21 +22,20 @@ public class MVWorldDeleteEvent extends Event implements Cancellable {
         this.removeFromConfig = removeFromConfig;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of HANDLERS.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of HANDLERS.
-     */
-    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 

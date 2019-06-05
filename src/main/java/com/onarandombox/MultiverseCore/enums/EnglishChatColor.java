@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 
 /**
  * A regular {@link ChatColor} represented by an english string.
+ *
  * @see ChatColor
  */
 public enum EnglishChatColor {
@@ -41,35 +42,21 @@ public enum EnglishChatColor {
     }
 
     /**
-     * Gets the text.
-     * @return The text.
-     */
-    public String getText() {
-        return this.name();
-    }
-
-    /**
-     * Gets the color.
-     * @return The color as {@link ChatColor}.
-     */
-    public ChatColor getColor() {
-        return this.color;
-    }
-
-    /**
      * Constructs a string containing all available colors.
+     *
      * @return That {@link String}.
      */
     public static String getAllColors() {
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         for (EnglishChatColor c : EnglishChatColor.values()) {
-            buffer += c.getColor() + c.getText() + " ";
+            buffer.append(c.getColor()).append(c.getText()).append(" ");
         }
-        return buffer;
+        return buffer.toString();
     }
 
     /**
      * Constructs an {@link EnglishChatColor} from a {@link String}.
+     *
      * @param text The {@link String}.
      * @return The {@link EnglishChatColor}.
      */
@@ -86,10 +73,29 @@ public enum EnglishChatColor {
 
     /**
      * Looks if the given-color name is a valid color.
+     *
      * @param aliasColor A color-name.
      * @return True if the name is a valid color, false if it isn't.
      */
     public static boolean isValidAliasColor(String aliasColor) {
         return (EnglishChatColor.fromString(aliasColor) != null);
+    }
+
+    /**
+     * Gets the text.
+     *
+     * @return The text.
+     */
+    public String getText() {
+        return this.name();
+    }
+
+    /**
+     * Gets the color.
+     *
+     * @return The color as {@link ChatColor}.
+     */
+    public ChatColor getColor() {
+        return this.color;
     }
 }

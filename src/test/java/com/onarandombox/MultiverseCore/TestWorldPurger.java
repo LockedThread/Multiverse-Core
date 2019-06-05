@@ -19,6 +19,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,7 @@ public class TestWorldPurger {
     Zombie zombie;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         creator = new TestInstanceCreator();
         assertTrue(creator.setUp());
         core = creator.getCore();
@@ -50,7 +51,7 @@ public class TestWorldPurger {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         creator.tearDown();
     }
 
@@ -58,55 +59,55 @@ public class TestWorldPurger {
     public void test() {
         // test 1: purge ALL without negations ==> both should be removed
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("ALL"), false, false);
+        purger.purgeWorld(mvWorld, Collections.singletonList("ALL"), false, false);
         verify(sheep).remove();
         verify(zombie).remove();
 
         // test 2: purge ALL with one negation ==> the zombie should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("ALL"), false, true);
+        purger.purgeWorld(mvWorld, Collections.singletonList("ALL"), false, true);
         verify(sheep).remove();
         verify(zombie, never()).remove();
 
         // test 3: purge ALL with both negations ==> everybody should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("ALL"), true, true);
+        purger.purgeWorld(mvWorld, Collections.singletonList("ALL"), true, true);
         verify(sheep, never()).remove();
         verify(zombie, never()).remove();
 
         // test 4: purge ANIMALS without negations ==> the zombie should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("ANIMALS"), false, false);
+        purger.purgeWorld(mvWorld, Collections.singletonList("ANIMALS"), false, false);
         verify(sheep).remove();
         verify(zombie, never()).remove();
 
         // test 5: purge MONSTERS with one negation ==> nobody should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("MONSTERS"), true, false);
+        purger.purgeWorld(mvWorld, Collections.singletonList("MONSTERS"), true, false);
         verify(sheep).remove();
         verify(zombie).remove();
 
         // test 6: purge MONSTERS both negations ==> the zombie should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("MONSTERS"), true, true);
+        purger.purgeWorld(mvWorld, Collections.singletonList("MONSTERS"), true, true);
         verify(sheep).remove();
         verify(zombie, never()).remove();
 
         // test 7: purge SHEEP without negations ==> the zombie should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("SHEEP"), false, false);
+        purger.purgeWorld(mvWorld, Collections.singletonList("SHEEP"), false, false);
         verify(sheep).remove();
         verify(zombie, never()).remove();
 
         // test 8: purge SHEEP with one negation ==> nobody should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("SHEEP"), false, true);
+        purger.purgeWorld(mvWorld, Collections.singletonList("SHEEP"), false, true);
         verify(sheep).remove();
         verify(zombie).remove();
 
         // test 9: purge ZOMBIE with both negations ==> the zombie should survive
         createAnimals();
-        purger.purgeWorld(mvWorld, Arrays.asList("ZOMBIE"), true, true);
+        purger.purgeWorld(mvWorld, Collections.singletonList("ZOMBIE"), true, true);
         verify(sheep).remove();
         verify(zombie, never()).remove();
 
@@ -121,6 +122,6 @@ public class TestWorldPurger {
         zombie = mock(Zombie.class);
         when(zombie.getType()).thenReturn(EntityType.ZOMBIE);
         when(zombie.getWorld()).thenReturn(world);
-        when(cbworld.getEntities()).thenReturn(Arrays.asList((Entity) sheep, (Entity) zombie));
+        when(cbworld.getEntities()).thenReturn(Arrays.asList(sheep, zombie));
     }
 }

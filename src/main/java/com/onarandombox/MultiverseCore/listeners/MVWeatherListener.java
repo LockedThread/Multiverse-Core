@@ -18,7 +18,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
  * Multiverse's Weather {@link Listener}.
  */
 public class MVWeatherListener implements Listener {
-    private MultiverseCore plugin;
+    private final MultiverseCore plugin;
 
     public MVWeatherListener(MultiverseCore plugin) {
         this.plugin = plugin;
@@ -26,6 +26,7 @@ public class MVWeatherListener implements Listener {
 
     /**
      * This method is called when the weather changes.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -42,6 +43,7 @@ public class MVWeatherListener implements Listener {
 
     /**
      * This method is called when a big storm is going to start.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler

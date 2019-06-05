@@ -22,11 +22,11 @@ public abstract class MultiverseCommand extends Command {
     /**
      * The reference to the core.
      */
-    protected MultiverseCore plugin;
+    protected final MultiverseCore plugin;
     /**
      * The reference to {@link MultiverseMessaging}.
      */
-    protected MultiverseMessaging messaging;
+    protected final MultiverseMessaging messaging;
 
     public MultiverseCommand(MultiverseCore plugin) {
         super(plugin);

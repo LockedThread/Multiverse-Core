@@ -24,7 +24,7 @@ public class GithubPasteService implements PasteService {
 
     @Override
     public String encodeData(String data) {
-        Map<String, String> mapData = new HashMap<String, String>();
+        Map<String, String> mapData = new HashMap<>();
         mapData.put("multiverse.txt", data);
         return this.encodeData(mapData);
     }
@@ -35,8 +35,7 @@ public class GithubPasteService implements PasteService {
         root.add("description", new JsonPrimitive("Multiverse-Core Debug Info"));
         root.add("public", new JsonPrimitive(!this.isPrivate));
         JsonObject fileList = new JsonObject();
-        for (Map.Entry<String, String> entry : files.entrySet())
-        {
+        for (Map.Entry<String, String> entry : files.entrySet()) {
             JsonObject fileObject = new JsonObject();
             fileObject.add("content", new JsonPrimitive(entry.getValue()));
             fileList.add(entry.getKey(), fileObject);
@@ -82,12 +81,14 @@ public class GithubPasteService implements PasteService {
             if (wr != null) {
                 try {
                     wr.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
             if (rd != null) {
                 try {
                     rd.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
         }
     }

@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -72,7 +71,7 @@ public class TestEntitySpawnRules {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         creator.tearDown();
     }
 
@@ -107,42 +106,42 @@ public class TestEntitySpawnRules {
     @Test
     public void test() {
         // test 1: no spawning at all allowed
-        adjustSettings(false, false, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        adjustSettings(false, false, Collections.emptyList(), Collections.emptyList());
         createAnimals();
         spawnAllNatural();
         verify(sheepEvent).setCancelled(true);
         verify(zombieEvent).setCancelled(true);
 
         // test 2: only monsters
-        adjustSettings(false, true, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        adjustSettings(false, true, Collections.emptyList(), Collections.emptyList());
         createAnimals();
         spawnAllNatural();
         verify(sheepEvent).setCancelled(true);
         verify(zombieEvent).setCancelled(false);
 
         // test 3: all spawning allowed
-        adjustSettings(true, true, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        adjustSettings(true, true, Collections.emptyList(), Collections.emptyList());
         createAnimals();
         spawnAllNatural();
         verify(sheepEvent).setCancelled(false);
         verify(zombieEvent).setCancelled(false);
 
         // test 4: no spawning with zombie exception
-        adjustSettings(false, false, Collections.EMPTY_LIST, Arrays.asList("ZOMBIE"));
+        adjustSettings(false, false, Collections.emptyList(), Collections.singletonList("ZOMBIE"));
         createAnimals();
         spawnAllNatural();
         verify(sheepEvent).setCancelled(true);
         verify(zombieEvent).setCancelled(false);
 
         // test 5: all spawning with sheep exception
-        adjustSettings(true, true, Arrays.asList("SHEEP"), Collections.EMPTY_LIST);
+        adjustSettings(true, true, Collections.singletonList("SHEEP"), Collections.emptyList());
         createAnimals();
         spawnAllNatural();
         verify(sheepEvent).setCancelled(true);
         verify(zombieEvent).setCancelled(false);
 
         // test 6: eggs
-        adjustSettings(false, false, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        adjustSettings(false, false, Collections.emptyList(), Collections.emptyList());
         createAnimals();
         spawnAll(SpawnReason.SPAWNER_EGG);
         verify(sheepEvent, never()).setCancelled(anyBoolean());
@@ -157,6 +156,6 @@ public class TestEntitySpawnRules {
         when(zombie.getType()).thenReturn(EntityType.ZOMBIE);
         when(zombie.getWorld()).thenReturn(this.cbworld);
 
-        when(cbworld.getEntities()).thenReturn(Arrays.asList((Entity) sheep, (Entity) zombie));
+        when(cbworld.getEntities()).thenReturn(Arrays.asList(sheep, zombie));
     }
 }

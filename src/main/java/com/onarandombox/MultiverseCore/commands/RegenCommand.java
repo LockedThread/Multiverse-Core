@@ -42,7 +42,7 @@ public class RegenCommand extends MultiverseCommand {
         String seed = (args.size() == 3) ? args.get(2) : "";
 
         Class<?>[] paramTypes = {String.class, Boolean.class, Boolean.class, String.class};
-        List<Object> objectArgs = new ArrayList<Object>();
+        List<Object> objectArgs = new ArrayList<>();
         objectArgs.add(args.get(0));
         objectArgs.add(useseed);
         objectArgs.add(randomseed);

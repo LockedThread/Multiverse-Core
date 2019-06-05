@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class WhoCommand extends MultiverseCommand {
 
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public WhoCommand(MultiverseCore plugin) {
         super(plugin);
@@ -41,6 +41,21 @@ public class WhoCommand extends MultiverseCommand {
         this.worldManager = this.plugin.getMVWorldManager();
     }
 
+    private static String buildPlayerString(MultiverseWorld world, Player viewer, final Collection<Player> visiblePlayers) {
+        // Retrieve the players in this world
+        List<Player> players = world.getCBWorld().getPlayers();
+        StringBuilder playerBuilder = new StringBuilder();
+        for (Player player : players) {
+            // If the viewer is the console or the viewier is allowed to see the player, show them.
+            // Make sure we're also ONLY showing online players.
+            // Since we already checked visible players, we'll just make sure who we're about to show is in that.
+            if (visiblePlayers.contains(player))
+                playerBuilder.append(player.getDisplayName()).append(", ");
+        }
+        String bString = playerBuilder.toString();
+        return (bString.length() == 0) ? "No players found." : bString.substring(0, bString.length() - 2);
+    }
+
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         // If this command was sent from a Player then we need to check Permissions
@@ -53,14 +68,14 @@ public class WhoCommand extends MultiverseCommand {
         }
 
         final Collection onlinePlayers = plugin.getServer().getOnlinePlayers();
-        final Collection<Player> visiblePlayers = new HashSet<Player>(onlinePlayers.size());
+        final Collection<Player> visiblePlayers = new HashSet<>(onlinePlayers.size());
         for (final Object player : onlinePlayers) {
             if (player instanceof Player && (p == null || p.canSee((Player) player))) {
                 visiblePlayers.add((Player) player);
             }
         }
 
-        if (args.size()  == 1) {
+        if (args.size() == 1) {
             if (args.get(0).equalsIgnoreCase("--all") || args.get(0).equalsIgnoreCase("-a")) {
                 showAll = true;
             } else {
@@ -78,7 +93,7 @@ public class WhoCommand extends MultiverseCommand {
 
                 sender.sendMessage(String.format("%s--- Players in %s%s ---", ChatColor.AQUA,
                         world.getColoredWorldString(), ChatColor.AQUA));
-                sender.sendMessage(this.buildPlayerString(world, p, visiblePlayers));
+                sender.sendMessage(buildPlayerString(world, p, visiblePlayers));
                 return;
             }
         }
@@ -98,21 +113,5 @@ public class WhoCommand extends MultiverseCommand {
         if (!shownOne) {
             sender.sendMessage("No worlds found.");
         }
-        return;
-    }
-
-    private static String buildPlayerString(MultiverseWorld world, Player viewer, final Collection<Player> visiblePlayers) {
-        // Retrieve the players in this world
-        List<Player> players = world.getCBWorld().getPlayers();
-        StringBuilder playerBuilder = new StringBuilder();
-        for (Player player : players) {
-            // If the viewer is the console or the viewier is allowed to see the player, show them.
-            // Make sure we're also ONLY showing online players.
-            // Since we already checked visible players, we'll just make sure who we're about to show is in that.
-            if (visiblePlayers.contains(player))
-                playerBuilder.append(player.getDisplayName()).append(", ");
-        }
-        String bString = playerBuilder.toString();
-        return (bString.length() == 0) ? "No players found." : bString.substring(0, bString.length() - 2);
     }
 }

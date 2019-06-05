@@ -11,7 +11,9 @@ import org.bukkit.Server;
 
 import java.util.logging.Level;
 
-/** A simple API to require plugins to have a log method. */
+/**
+ * A simple API to require plugins to have a log method.
+ */
 public interface LoggablePlugin {
     /**
      * Logs a message at the specified level.

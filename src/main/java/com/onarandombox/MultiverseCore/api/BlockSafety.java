@@ -11,6 +11,7 @@ import org.bukkit.entity.Vehicle;
 public interface BlockSafety {
     /**
      * This function checks whether the block at the given coordinates are above air or not.
+     *
      * @param l The {@link Location} of the block.
      * @return True if the block at that {@link Location} is above air.
      */
@@ -18,10 +19,11 @@ public interface BlockSafety {
 
     /**
      * Checks if a player can spawn safely at the given coordinates.
+     *
      * @param world The {@link World}.
-     * @param x The x-coordinate.
-     * @param y The y-coordinate.
-     * @param z The z-coordinate.
+     * @param x     The x-coordinate.
+     * @param y     The y-coordinate.
+     * @param z     The z-coordinate.
      * @return True if a player can spawn safely at the given coordinates.
      */
     boolean playerCanSpawnHereSafely(World world, double x, double y, double z);
@@ -37,6 +39,7 @@ public interface BlockSafety {
 
     /**
      * Gets a safe bed spawn location OR null if the bed is invalid.
+     *
      * @param l The location of the bead head (block with the pillow on it).
      * @return Safe location around the bed or null if no location was found.
      */
@@ -44,6 +47,7 @@ public interface BlockSafety {
 
     /**
      * Gets the location of the top block at the specified {@link Location}.
+     *
      * @param l Any {@link Location}.
      * @return The {@link Location} of the top-block.
      */
@@ -51,6 +55,7 @@ public interface BlockSafety {
 
     /**
      * Gets the location of the top block at the specified {@link Location}.
+     *
      * @param l Any {@link Location}.
      * @return The {@link Location} of the top-block.
      */
@@ -58,6 +63,7 @@ public interface BlockSafety {
 
     /**
      * Checks if an entity would be on track at the specified {@link Location}.
+     *
      * @param l The {@link Location}.
      * @return True if an entity would be on tracks at the specified {@link Location}.
      */
@@ -65,6 +71,7 @@ public interface BlockSafety {
 
     /**
      * Checks if the specified {@link Minecart} can spawn safely.
+     *
      * @param cart The {@link Minecart}.
      * @return True if the minecart can spawn safely.
      */
@@ -72,6 +79,7 @@ public interface BlockSafety {
 
     /**
      * Checks if the specified {@link Vehicle} can spawn safely.
+     *
      * @param vehicle The {@link Vehicle}.
      * @return True if the vehicle can spawn safely.
      */

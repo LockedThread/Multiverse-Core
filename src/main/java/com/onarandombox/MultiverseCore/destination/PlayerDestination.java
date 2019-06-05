@@ -39,10 +39,7 @@ public class PlayerDestination implements MVDestination {
         if (items.length != 2) {
             return false;
         }
-        if (!items[0].equalsIgnoreCase("pl")) {
-            return false;
-        }
-        return true;
+        return items[0].equalsIgnoreCase("pl");
     }
 
     /**

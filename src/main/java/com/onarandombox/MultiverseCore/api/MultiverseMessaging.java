@@ -1,19 +1,13 @@
 package com.onarandombox.MultiverseCore.api;
 
-import java.util.Collection;
-
 import org.bukkit.command.CommandSender;
+
+import java.util.Collection;
 
 /**
  * Multiverse-messaging.
  */
 public interface MultiverseMessaging {
-    /**
-     * Sets the message-cooldown.
-     * @param milliseconds The new message-cooldown in milliseconds.
-     */
-    void setCooldown(int milliseconds);
-
     /**
      * Sends a message to the specified sender if the cooldown has passed.
      *
@@ -50,7 +44,15 @@ public interface MultiverseMessaging {
 
     /**
      * Gets the message-cooldown.
+     *
      * @return The message-cooldown.
      */
     int getCooldown();
+
+    /**
+     * Sets the message-cooldown.
+     *
+     * @param milliseconds The new message-cooldown in milliseconds.
+     */
+    void setCooldown(int milliseconds);
 }

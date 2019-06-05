@@ -3,7 +3,6 @@ package com.onarandombox.MultiverseCore.listeners;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
-
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 
@@ -23,6 +22,7 @@ public abstract class MVChatListener implements Listener {
 
     /**
      * This handles a {@link ChatEvent}.
+     *
      * @param event The {@link ChatEvent}.
      */
     public void playerChat(ChatEvent event) {
@@ -37,7 +37,7 @@ public abstract class MVChatListener implements Listener {
                 world = event.getPlayer().getWorld().getName();
                 playerListener.getPlayerWorld().put(event.getPlayer().getName(), world);
             }
-            String prefix = "";
+            String prefix;
             // If we're not a MV world, don't do anything
             if (!this.worldManager.isMVWorld(world)) {
                 return;
@@ -48,11 +48,11 @@ public abstract class MVChatListener implements Listener {
             }
             prefix = mvworld.getColoredWorldString();
             String chat = event.getFormat();
-            
+
             String prefixChatFormat = plugin.getMVConfig().getPrefixChatFormat();
             prefixChatFormat = prefixChatFormat.replace("%world%", prefix).replace("%chat%", chat);
             prefixChatFormat = ChatColor.translateAlternateColorCodes('&', prefixChatFormat);
-            
+
             event.setFormat(prefixChatFormat);
         }
     }

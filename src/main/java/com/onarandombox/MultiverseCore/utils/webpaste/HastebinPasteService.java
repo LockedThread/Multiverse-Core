@@ -1,6 +1,5 @@
 package com.onarandombox.MultiverseCore.utils.webpaste;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -64,12 +63,14 @@ public class HastebinPasteService implements PasteService {
             if (wr != null) {
                 try {
                     wr.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
             if (rd != null) {
                 try {
                     rd.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
 package com.onarandombox.MultiverseCore.api;
 
-import java.util.List;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+
+import java.util.List;
 
 /**
  * Used to remove animals from worlds that don't belong there.
@@ -26,32 +26,32 @@ public interface WorldPurger {
     /**
      * Clear all animals/monsters that do not belong to a world according to the config.
      *
-     * @param mvworld The {@link MultiverseWorld}.
-     * @param thingsToKill A {@link List} of animals/monsters to be killed.
-     * @param negateAnimals Whether the monsters in the list should be negated.
+     * @param mvworld        The {@link MultiverseWorld}.
+     * @param thingsToKill   A {@link List} of animals/monsters to be killed.
+     * @param negateAnimals  Whether the monsters in the list should be negated.
      * @param negateMonsters Whether the animals in the list should be negated.
      */
     void purgeWorld(MultiverseWorld mvworld, List<String> thingsToKill, boolean negateAnimals,
-            boolean negateMonsters);
+                    boolean negateMonsters);
 
     /**
      * Clear all animals/monsters that do not belong to a world according to the config.
      *
-     * @param mvworld The {@link MultiverseWorld}.
-     * @param thingsToKill A {@link List} of animals/monsters to be killed.
-     * @param negateAnimals Whether the monsters in the list should be negated.
+     * @param mvworld        The {@link MultiverseWorld}.
+     * @param thingsToKill   A {@link List} of animals/monsters to be killed.
+     * @param negateAnimals  Whether the monsters in the list should be negated.
      * @param negateMonsters Whether the animals in the list should be negated.
-     * @param sender The {@link CommandSender} that initiated the action. He will/should be notified.
+     * @param sender         The {@link CommandSender} that initiated the action. He will/should be notified.
      */
     void purgeWorld(MultiverseWorld mvworld, List<String> thingsToKill, boolean negateAnimals,
-            boolean negateMonsters, CommandSender sender);
+                    boolean negateMonsters, CommandSender sender);
 
     /**
      * Determines whether the specified creature should be killed.
      *
-     * @param e The creature.
-     * @param thingsToKill A {@link List} of animals/monsters to be killed.
-     * @param negateAnimals Whether the monsters in the list should be negated.
+     * @param e              The creature.
+     * @param thingsToKill   A {@link List} of animals/monsters to be killed.
+     * @param negateAnimals  Whether the monsters in the list should be negated.
      * @param negateMonsters Whether the animals in the list should be negated.
      * @return {@code true} if the creature should be killed, otherwise {@code false}.
      */

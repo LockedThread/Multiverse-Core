@@ -9,7 +9,6 @@ package com.onarandombox.MultiverseCore.destination;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVDestination;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -67,7 +66,7 @@ public class BedDestination implements MVDestination {
                 this.knownBedLoc = this.plugin.getBlockSafety().getSafeBedSpawn(Bukkit.getOfflinePlayer(this.playername).getBedSpawnLocation());
 
             if (this.knownBedLoc == null) {
-                ((Player) entity).sendMessage("The bed was " + ChatColor.RED + "invalid or blocked" + ChatColor.RESET + ". Sorry.");
+                entity.sendMessage("The bed was " + ChatColor.RED + "invalid or blocked" + ChatColor.RESET + ". Sorry.");
             }
             return this.knownBedLoc;
         }

@@ -17,31 +17,27 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
  * Manages anchors.
  */
 public class AnchorManager {
-    private MultiverseCore plugin;
+    private final MultiverseCore plugin;
     private Map<String, Location> anchors;
     private FileConfiguration anchorConfig;
 
     public AnchorManager(MultiverseCore plugin) {
         this.plugin = plugin;
-        this.anchors = new HashMap<String, Location>();
+        this.anchors = new HashMap<>();
     }
 
     /**
      * Loads all anchors.
      */
     public void loadAnchors() {
-        this.anchors = new HashMap<String, Location>();
+        this.anchors = new HashMap<>();
         this.anchorConfig = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), "anchors.yml"));
         this.ensureConfigIsPrepared();
         ConfigurationSection anchorsSection = this.anchorConfig.getConfigurationSection("anchors");
@@ -67,6 +63,7 @@ public class AnchorManager {
 
     /**
      * Saves all anchors.
+     *
      * @return True if all anchors were successfully saved.
      */
     public boolean saveAnchors() {
@@ -81,6 +78,7 @@ public class AnchorManager {
 
     /**
      * Gets the {@link Location} associated with an anchor.
+     *
      * @param anchor The name of the anchor.
      * @return The {@link Location}.
      */
@@ -93,7 +91,8 @@ public class AnchorManager {
 
     /**
      * Saves an anchor.
-     * @param anchor The name of the anchor.
+     *
+     * @param anchor   The name of the anchor.
      * @param location The location of the anchor as string.
      * @return True if the anchor was successfully saved.
      */
@@ -104,8 +103,9 @@ public class AnchorManager {
 
     /**
      * Saves an anchor.
+     *
      * @param anchor The name of the anchor.
-     * @param l The {@link Location} of the anchor.
+     * @param l      The {@link Location} of the anchor.
      * @return True if the anchor was successfully saved.
      */
     public boolean saveAnchorLocation(String anchor, Location l) {
@@ -119,6 +119,7 @@ public class AnchorManager {
 
     /**
      * Gets all anchors.
+     *
      * @return An unmodifiable {@link Set} containing all anchors.
      */
     public Set<String> getAllAnchors() {
@@ -127,6 +128,7 @@ public class AnchorManager {
 
     /**
      * Gets all anchors that the specified {@link Player} can access.
+     *
      * @param p The {@link Player}.
      * @return An unmodifiable {@link Set} containing all anchors the specified {@link Player} can access.
      */
@@ -134,7 +136,7 @@ public class AnchorManager {
         if (p == null) {
             return this.anchors.keySet();
         }
-        Set<String> myAnchors = new HashSet<String>();
+        Set<String> myAnchors = new HashSet<>();
         for (String anchor : this.anchors.keySet()) {
             Location ancLoc = this.anchors.get(anchor);
             if (ancLoc == null) {
@@ -149,7 +151,7 @@ public class AnchorManager {
                 myAnchors.add(anchor);
             } else {
                 Logging.finer(String.format("Not adding anchor %s to the list, user %s doesn't have the %s " +
-                        "permission and 'enforceaccess' is enabled!",
+                                "permission and 'enforceaccess' is enabled!",
                         anchor, p.getName(), worldPerm));
             }
         }
@@ -158,6 +160,7 @@ public class AnchorManager {
 
     /**
      * Deletes the specified anchor.
+     *
      * @param s The name of the anchor.
      * @return True if the anchor was successfully deleted.
      */

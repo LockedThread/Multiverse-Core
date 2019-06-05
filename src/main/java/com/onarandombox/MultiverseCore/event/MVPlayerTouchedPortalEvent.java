@@ -17,8 +17,9 @@ import org.bukkit.event.HandlerList;
  * This event is thrown when a portal is touched.
  */
 public class MVPlayerTouchedPortalEvent extends Event implements Cancellable {
-    private Player p;
-    private Location l;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private final Player p;
+    private final Location l;
     private boolean isCancelled;
     private boolean canUse = true;
 
@@ -27,7 +28,14 @@ public class MVPlayerTouchedPortalEvent extends Event implements Cancellable {
         this.l = l;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of HANDLERS.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
@@ -38,15 +46,8 @@ public class MVPlayerTouchedPortalEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of HANDLERS.
-     */
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
-    /**
      * Gets the {@link Location} of the portal-block that was touched.
+     *
      * @return The {@link Location} of the portal-block that was touched.
      */
     public Location getBlockTouched() {
@@ -55,6 +56,7 @@ public class MVPlayerTouchedPortalEvent extends Event implements Cancellable {
 
     /**
      * Gets the {@link Player} that's touching the portal.
+     *
      * @return The {@link Player} that's touching the portal.
      */
     public Player getPlayer() {

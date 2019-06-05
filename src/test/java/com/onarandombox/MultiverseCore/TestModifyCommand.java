@@ -31,7 +31,7 @@ public class TestModifyCommand {
     CommandSender mockCommandSender;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         creator = new TestInstanceCreator();
         assertTrue(creator.setUp());
         mockServer = creator.getServer();
@@ -43,7 +43,7 @@ public class TestModifyCommand {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         creator.tearDown();
     }
 

@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -51,7 +50,7 @@ public class TestWorldStuff {
     private CommandSender mockCommandSender;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         creator = new TestInstanceCreator();
         assertTrue(creator.setUp());
         mockServer = creator.getServer();
@@ -59,7 +58,7 @@ public class TestWorldStuff {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         creator.tearDown();
     }
 

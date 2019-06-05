@@ -18,6 +18,7 @@ public interface ChatEvent {
 
     /**
      * Sets the format.
+     *
      * @param s The new format.
      */
     void setFormat(String s);

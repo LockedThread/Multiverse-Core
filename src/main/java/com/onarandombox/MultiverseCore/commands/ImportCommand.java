@@ -18,7 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
  * Imports a new world of the specified type.
  */
 public class ImportCommand extends MultiverseCommand {
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public ImportCommand(MultiverseCore plugin) {
         super(plugin);
@@ -54,15 +53,8 @@ public class ImportCommand extends MultiverseCommand {
      */
     private static boolean checkIfIsWorld(File worldFolder) {
         if (worldFolder.isDirectory()) {
-            File[] files = worldFolder.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File file, String name) {
-                    return name.equalsIgnoreCase("level.dat");
-                }
-            });
-            if (files != null && files.length > 0) {
-                return true;
-            }
+            File[] files = worldFolder.listFiles((file, name) -> name.equalsIgnoreCase("level.dat"));
+            return files != null && files.length > 0;
         }
         return false;
     }
@@ -73,19 +65,17 @@ public class ImportCommand extends MultiverseCommand {
             return "";
         }
         File[] files = worldFolder.listFiles();
-        String worldList = "";
+        StringBuilder worldList = new StringBuilder();
         Collection<MultiverseWorld> worlds = this.worldManager.getMVWorlds();
-        List<String> worldStrings = new ArrayList<String>();
+        List<String> worldStrings = new ArrayList<>();
         for (MultiverseWorld world : worlds) {
             worldStrings.add(world.getName());
         }
-        for (String world : this.worldManager.getUnloadedWorlds()) {
-            worldStrings.add(world);
-        }
+        worldStrings.addAll(this.worldManager.getUnloadedWorlds());
         ChatColor currColor = ChatColor.WHITE;
         for (File file : files) {
             if (file.isDirectory() && checkIfIsWorld(file) && !worldStrings.contains(file.getName())) {
-                worldList += currColor + file.getName() + " ";
+                worldList.append(currColor).append(file.getName()).append(" ");
                 if (currColor == ChatColor.WHITE) {
                     currColor = ChatColor.YELLOW;
                 } else {
@@ -93,9 +83,9 @@ public class ImportCommand extends MultiverseCommand {
                 }
             }
         }
-        return worldList;
+        return worldList.toString();
     }
-    
+
     private String trimWorldName(String userInput) {
         // Removes relative paths.
         return userInput.replaceAll("^[./\\\\]+", "");

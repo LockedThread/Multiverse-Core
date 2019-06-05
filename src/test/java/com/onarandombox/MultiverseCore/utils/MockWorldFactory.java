@@ -30,12 +30,12 @@ import static org.mockito.Mockito.*;
 
 public class MockWorldFactory {
 
-    private static final Map<String, World> createdWorlds = new LinkedHashMap<String, World>();
-    private static final Map<UUID, World> worldUIDS = new HashMap<UUID, World>();
+    private static final Map<String, World> createdWorlds = new LinkedHashMap<>();
+    private static final Map<UUID, World> worldUIDS = new HashMap<>();
 
-    private static final Map<World, Boolean> pvpStates = new WeakHashMap<World, Boolean>();
-    private static final Map<World, Boolean> keepSpawnInMemoryStates = new WeakHashMap<World, Boolean>();
-    private static final Map<World, Difficulty> difficultyStates = new WeakHashMap<World, Difficulty>();
+    private static final Map<World, Boolean> pvpStates = new WeakHashMap<>();
+    private static final Map<World, Boolean> keepSpawnInMemoryStates = new WeakHashMap<>();
+    private static final Map<World, Difficulty> difficultyStates = new WeakHashMap<>();
 
     private MockWorldFactory() {
     }
@@ -49,91 +49,67 @@ public class MockWorldFactory {
     private static World basics(String world, World.Environment env, WorldType type) {
         World mockWorld = mock(World.class);
         when(mockWorld.getName()).thenReturn(world);
-        when(mockWorld.getPVP()).thenAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!pvpStates.containsKey(w))
-                    pvpStates.put(w, true); // default value
-                return pvpStates.get(w);
-            }
+        when(mockWorld.getPVP()).thenAnswer((Answer<Boolean>) invocation -> {
+            World w = (World) invocation.getMock();
+            if (!pvpStates.containsKey(w))
+                pvpStates.put(w, true); // default value
+            return pvpStates.get(w);
         });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                pvpStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
-                return null;
-            }
+        doAnswer((Answer<Void>) invocation -> {
+            pvpStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
+            return null;
         }).when(mockWorld).setPVP(anyBoolean());
-        when(mockWorld.getKeepSpawnInMemory()).thenAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!keepSpawnInMemoryStates.containsKey(w))
-                    keepSpawnInMemoryStates.put(w, true); // default value
-                return keepSpawnInMemoryStates.get(w);
-            }
+        when(mockWorld.getKeepSpawnInMemory()).thenAnswer((Answer<Boolean>) invocation -> {
+            World w = (World) invocation.getMock();
+            if (!keepSpawnInMemoryStates.containsKey(w))
+                keepSpawnInMemoryStates.put(w, true); // default value
+            return keepSpawnInMemoryStates.get(w);
         });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                keepSpawnInMemoryStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
-                return null;
-            }
+        doAnswer((Answer<Void>) invocation -> {
+            keepSpawnInMemoryStates.put((World) invocation.getMock(), (Boolean) invocation.getArguments()[0]);
+            return null;
         }).when(mockWorld).setKeepSpawnInMemory(anyBoolean());
-        when(mockWorld.getDifficulty()).thenAnswer(new Answer<Difficulty>() {
-            @Override
-            public Difficulty answer(InvocationOnMock invocation) throws Throwable {
-                World w = (World) invocation.getMock();
-                if (!difficultyStates.containsKey(w))
-                    difficultyStates.put(w, Difficulty.NORMAL); // default value
-                return difficultyStates.get(w);
-            }
+        when(mockWorld.getDifficulty()).thenAnswer((Answer<Difficulty>) invocation -> {
+            World w = (World) invocation.getMock();
+            if (!difficultyStates.containsKey(w))
+                difficultyStates.put(w, Difficulty.NORMAL); // default value
+            return difficultyStates.get(w);
         });
-        doAnswer(new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                difficultyStates.put((World) invocation.getMock(), (Difficulty) invocation.getArguments()[0]);
-                return null;
-            }
+        doAnswer((Answer<Void>) invocation -> {
+            difficultyStates.put((World) invocation.getMock(), (Difficulty) invocation.getArguments()[0]);
+            return null;
         }).when(mockWorld).setDifficulty(any(Difficulty.class));
         when(mockWorld.getEnvironment()).thenReturn(env);
         when(mockWorld.getWorldType()).thenReturn(type);
         when(mockWorld.getSpawnLocation()).thenReturn(new Location(mockWorld, 0, 64, 0));
-        when(mockWorld.getWorldFolder()).thenAnswer(new Answer<File>() {
-            @Override
-            public File answer(InvocationOnMock invocation) throws Throwable {
-                if (!(invocation.getMock() instanceof World))
-                    return null;
+        when(mockWorld.getWorldFolder()).thenAnswer((Answer<File>) invocation -> {
+            if (!(invocation.getMock() instanceof World))
+                return null;
 
-                World thiss = (World) invocation.getMock();
-                return new File(TestInstanceCreator.serverDirectory, thiss.getName());
-            }
+            World thiss = (World) invocation.getMock();
+            return new File(TestInstanceCreator.serverDirectory, thiss.getName());
         });
-        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(new Answer<Block>() {
-            @Override
-            public Block answer(InvocationOnMock invocation) throws Throwable {
-                Location loc;
-                try {
-                    loc = (Location) invocation.getArguments()[0];
-                } catch (Exception e) {
-                    return null;
-                }
-                Material blockType = Material.AIR;
-                Block mockBlock = mock(Block.class);
-                if (loc.getBlockY() < 64) {
-                    blockType = Material.DIRT;
-                }
-
-                when(mockBlock.getType()).thenReturn(blockType);
-                when(mockBlock.getWorld()).thenReturn(loc.getWorld());
-                when(mockBlock.getX()).thenReturn(loc.getBlockX());
-                when(mockBlock.getY()).thenReturn(loc.getBlockY());
-                when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
-                when(mockBlock.getLocation()).thenReturn(loc);
-                when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
-                return mockBlock;
+        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer((Answer<Block>) invocation -> {
+            Location loc;
+            try {
+                loc = (Location) invocation.getArguments()[0];
+            } catch (Exception e) {
+                return null;
             }
+            Material blockType = Material.AIR;
+            Block mockBlock = mock(Block.class);
+            if (loc.getBlockY() < 64) {
+                blockType = Material.DIRT;
+            }
+
+            when(mockBlock.getType()).thenReturn(blockType);
+            when(mockBlock.getWorld()).thenReturn(loc.getWorld());
+            when(mockBlock.getX()).thenReturn(loc.getBlockX());
+            when(mockBlock.getY()).thenReturn(loc.getBlockY());
+            when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
+            when(mockBlock.getLocation()).thenReturn(loc);
+            when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
+            return mockBlock;
         });
         when(mockWorld.getUID()).thenReturn(UUID.randomUUID());
         return mockWorld;
@@ -145,38 +121,32 @@ public class MockWorldFactory {
         when(mockWorld.getEnvironment()).thenReturn(env);
         when(mockWorld.getWorldType()).thenReturn(type);
         when(mockWorld.getSpawnLocation()).thenReturn(new Location(mockWorld, 0, 64, 0));
-        when(mockWorld.getWorldFolder()).thenAnswer(new Answer<File>() {
-            @Override
-            public File answer(InvocationOnMock invocation) throws Throwable {
-                if (!(invocation.getMock() instanceof World))
-                    return null;
+        when(mockWorld.getWorldFolder()).thenAnswer((Answer<File>) invocation -> {
+            if (!(invocation.getMock() instanceof World))
+                return null;
 
-                World thiss = (World) invocation.getMock();
-                return new File(TestInstanceCreator.serverDirectory, thiss.getName());
-            }
+            World thiss = (World) invocation.getMock();
+            return new File(TestInstanceCreator.serverDirectory, thiss.getName());
         });
-        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer(new Answer<Block>() {
-            @Override
-            public Block answer(InvocationOnMock invocation) throws Throwable {
-                Location loc;
-                try {
-                    loc = (Location) invocation.getArguments()[0];
-                } catch (Exception e) {
-                    return null;
-                }
-
-                Block mockBlock = mock(Block.class);
-                Material blockType = Material.AIR;
-
-                when(mockBlock.getType()).thenReturn(blockType);
-                when(mockBlock.getWorld()).thenReturn(loc.getWorld());
-                when(mockBlock.getX()).thenReturn(loc.getBlockX());
-                when(mockBlock.getY()).thenReturn(loc.getBlockY());
-                when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
-                when(mockBlock.getLocation()).thenReturn(loc);
-                when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
-                return mockBlock;
+        when(mockWorld.getBlockAt(any(Location.class))).thenAnswer((Answer<Block>) invocation -> {
+            Location loc;
+            try {
+                loc = (Location) invocation.getArguments()[0];
+            } catch (Exception e) {
+                return null;
             }
+
+            Block mockBlock = mock(Block.class);
+            Material blockType = Material.AIR;
+
+            when(mockBlock.getType()).thenReturn(blockType);
+            when(mockBlock.getWorld()).thenReturn(loc.getWorld());
+            when(mockBlock.getX()).thenReturn(loc.getBlockX());
+            when(mockBlock.getY()).thenReturn(loc.getBlockY());
+            when(mockBlock.getZ()).thenReturn(loc.getBlockZ());
+            when(mockBlock.getLocation()).thenReturn(loc);
+            when(mockBlock.isEmpty()).thenReturn(blockType == Material.AIR);
+            return mockBlock;
         });
         when(mockWorld.getUID()).thenReturn(UUID.randomUUID());
         return mockWorld;
@@ -212,7 +182,7 @@ public class MockWorldFactory {
     }
 
     public static List<World> getWorlds() {
-        return new ArrayList<World>(createdWorlds.values());
+        return new ArrayList<>(createdWorlds.values());
     }
 
     public static void clearWorlds() {

@@ -1,10 +1,6 @@
 package com.onarandombox.MultiverseCore.utils.webpaste;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -16,7 +12,7 @@ import java.util.Map;
  */
 public class PastebinPasteService implements PasteService {
 
-    private boolean isPrivate;
+    private final boolean isPrivate;
 
     public PastebinPasteService(boolean isPrivate) {
         this.isPrivate = isPrivate;
@@ -83,12 +79,14 @@ public class PastebinPasteService implements PasteService {
             if (wr != null) {
                 try {
                     wr.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
             if (rd != null) {
                 try {
                     rd.close();
-                } catch (IOException ignore) { }
+                } catch (IOException ignore) {
+                }
             }
         }
     }

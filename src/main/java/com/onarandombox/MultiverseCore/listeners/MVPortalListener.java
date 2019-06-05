@@ -25,7 +25,7 @@ import java.util.logging.Level;
  */
 public class MVPortalListener implements Listener {
 
-    private MultiverseCore plugin;
+    private final MultiverseCore plugin;
 
     public MVPortalListener(MultiverseCore core) {
         this.plugin = core;
@@ -50,6 +50,7 @@ public class MVPortalListener implements Listener {
 
     /**
      * This is called when a portal is created as the result of another world being linked.
+     *
      * @param event The event where a portal was formed due to a world link
      */
     @EventHandler(ignoreCancelled = true)
@@ -71,10 +72,10 @@ public class MVPortalListener implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
-        if (event.getClickedBlock().getType() != Material.END_PORTAL_FRAME) {
+        if (event.getClickedBlock().getType() != Material.ENDER_PORTAL_FRAME) {
             return;
         }
-        if (event.getItem() == null || event.getItem().getType() != Material.ENDER_EYE) {
+        if (event.getItem() == null || event.getItem().getType() != Material.EYE_OF_ENDER) {
             return;
         }
         MultiverseWorld world = this.plugin.getMVWorldManager().getMVWorld(event.getPlayer().getWorld());

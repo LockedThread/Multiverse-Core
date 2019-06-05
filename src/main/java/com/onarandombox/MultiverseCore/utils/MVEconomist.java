@@ -21,6 +21,16 @@ public class MVEconomist {
         vaultHandler = new VaultHandler(plugin);
     }
 
+    /**
+     * Determines if the currency type string given represents an item currency.
+     *
+     * @param currency the type of currency.
+     * @return true if currency string matches a valid material.
+     */
+    public static boolean isItemCurrency(Material currency) {
+        return currency != null;
+    }
+
     private boolean isUsingVault(Material currency) {
         return !isItemCurrency(currency) && getVaultHandler().hasEconomy();
     }
@@ -37,7 +47,7 @@ public class MVEconomist {
     /**
      * Formats the amount to a human readable currency string.
      *
-     * @param amount the amount of currency.
+     * @param amount   the amount of currency.
      * @param currency the type of currency. Null indicates a non-item currency is used.
      * @return the human readable currency string.
      */
@@ -65,8 +75,8 @@ public class MVEconomist {
     /**
      * Determines if a player has enough of a given currency.
      *
-     * @param player the player to check for currency.
-     * @param amount the amount of currency.
+     * @param player   the player to check for currency.
+     * @param amount   the amount of currency.
      * @param currency the type of currency. Null indicates non-item currency is used.
      * @return true if the player has enough of the given currency or the amount is 0 or less.
      */
@@ -84,7 +94,7 @@ public class MVEconomist {
      * Formats a message for a player indicating they don't have enough currency.
      *
      * @param currency the type of currency. Null indicates a non-item currency is used.
-     * @param message The more specific message to append to the generic message of not having enough.
+     * @param message  The more specific message to append to the generic message of not having enough.
      * @return the formatted insufficient funds message.
      */
     public String getNSFMessage(Material currency, String message) {
@@ -95,8 +105,8 @@ public class MVEconomist {
      * Deposits a given amount of currency either into the player's economy account or inventory if the currency
      * is not null.
      *
-     * @param player the player to give currency to.
-     * @param amount the amount to give.
+     * @param player   the player to give currency to.
+     * @param amount   the amount to give.
      * @param currency the type of currency.
      */
     public void deposit(Player player, double amount, @Nullable Material currency) {
@@ -111,8 +121,8 @@ public class MVEconomist {
      * Withdraws a given amount of currency either from the player's economy account or inventory if the currency
      * is not null.
      *
-     * @param player the player to take currency from.
-     * @param amount the amount to take.
+     * @param player   the player to take currency from.
+     * @param amount   the amount to take.
      * @param currency the type of currency.
      */
     public void withdraw(Player player, double amount, @Nullable Material currency) {
@@ -139,7 +149,7 @@ public class MVEconomist {
      * specific balances then the global balance will be returned.
      *
      * @param player the player to get the balance for.
-     * @param world the world to get the balance for.
+     * @param world  the world to get the balance for.
      * @return the economy balance of the given player in the given world.
      * @throws IllegalStateException thrown if this is used when no economy plugin is available.
      */
@@ -170,7 +180,7 @@ public class MVEconomist {
      * specific balances then the global balance will be set.
      *
      * @param player the player to set the balance for.
-     * @param world the world to get the balance for.
+     * @param world  the world to get the balance for.
      * @param amount the amount to set the player's balance to.
      * @throws IllegalStateException thrown if this is used when no economy plugin is available.
      */
@@ -197,16 +207,6 @@ public class MVEconomist {
     @Deprecated
     public VaultHandler getVaultHandler() {
         return vaultHandler;
-    }
-
-    /**
-     * Determines if the currency type string given represents an item currency.
-     *
-     * @param currency the type of currency.
-     * @return true if currency string matches a valid material.
-     */
-    public static boolean isItemCurrency(Material currency) {
-        return currency != null;
     }
 
     private static class ItemEconomy {
@@ -251,6 +251,7 @@ public class MVEconomist {
             showReceipt(player, (amount * -1), type);
         }
 
+        @SuppressWarnings("unchecked")
         private static void takeItem(Player player, double amount, Material type) {
             int removed = 0;
             HashMap<Integer, ItemStack> items = (HashMap<Integer, ItemStack>) player.getInventory().all(type);

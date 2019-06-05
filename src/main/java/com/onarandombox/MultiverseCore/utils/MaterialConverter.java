@@ -16,7 +16,7 @@ public class MaterialConverter {
      * Material.
      *
      * @param config The config with the value to convert.
-     * @param path The path of the value in the config.
+     * @param path   The path of the value in the config.
      * @return The converted Material type or null if no matching type.
      */
     @Nullable

@@ -7,20 +7,19 @@
 
 package com.onarandombox.MultiverseCore.commands;
 
-import java.util.List;
-
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
+import java.util.List;
 
 /**
  * Creates a clone of a world.
  */
 public class CloneCommand extends MultiverseCommand {
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public CloneCommand(MultiverseCore plugin) {
         super(plugin);
@@ -40,7 +39,7 @@ public class CloneCommand extends MultiverseCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         String oldName = args.get(0);
-	    if (!this.worldManager.hasUnloadedWorld(oldName, true)) {
+        if (!this.worldManager.hasUnloadedWorld(oldName, true)) {
             // If no world was found, we can't clone.
             sender.sendMessage("Sorry, Multiverse doesn't know about world " + oldName + ", so we can't clone it!");
             sender.sendMessage("Check the " + ChatColor.GREEN + "/mv list" + ChatColor.WHITE + " command to verify it is listed.");

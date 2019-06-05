@@ -1,7 +1,7 @@
 package com.onarandombox.MultiverseCore.destination;
 
-import com.onarandombox.MultiverseCore.api.Teleporter;
 import com.onarandombox.MultiverseCore.api.MVDestination;
+import com.onarandombox.MultiverseCore.api.Teleporter;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;

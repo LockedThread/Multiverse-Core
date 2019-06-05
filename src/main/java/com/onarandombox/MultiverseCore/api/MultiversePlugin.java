@@ -1,5 +1,12 @@
 package com.onarandombox.MultiverseCore.api;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.utils.DebugLog;
+import com.pneumaticraft.commandhandler.CommandHandler;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,29 +14,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.utils.DebugLog;
-import com.pneumaticraft.commandhandler.CommandHandler;
-
 /**
  * Make things easier for MV-Plugins!
  */
 public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
-    private MultiverseCore core;
     /**
      * Prefix for standard log entrys.
      */
     protected String logTag;
+    private MultiverseCore core;
     private DebugLog debugLog;
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Note: You can't override this, use {@link #onPluginEnable()} instead!
+     *
      * @see #onPluginEnable()
      */
     @Override
@@ -70,7 +70,7 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
      * @return The readable authors-{@link String}
      */
     protected String getAuthors() {
-        String authors = "";
+        StringBuilder authors = new StringBuilder();
         List<String> auths = this.getDescription().getAuthors();
         if (auths.size() == 0) {
             return "";
@@ -82,9 +82,9 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
 
         for (int i = 0; i < auths.size(); i++) {
             if (i == this.getDescription().getAuthors().size() - 1) {
-                authors += " and " + this.getDescription().getAuthors().get(i);
+                authors.append(" and ").append(this.getDescription().getAuthors().get(i));
             } else {
-                authors += ", " + this.getDescription().getAuthors().get(i);
+                authors.append(", ").append(this.getDescription().getAuthors().get(i));
             }
         }
         return authors.substring(2);
@@ -92,12 +92,14 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
 
     /**
      * Called when the plugin is enabled.
+     *
      * @see #onEnable()
      */
     protected abstract void onPluginEnable();
 
     /**
      * You can register commands here.
+     *
      * @param handler The CommandHandler.
      */
     protected abstract void registerCommands(CommandHandler handler);
@@ -109,7 +111,7 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
             return true;
         }
 
-        ArrayList<String> allArgs = new ArrayList<String>(args.length + 1);
+        ArrayList<String> allArgs = new ArrayList<>(args.length + 1);
         allArgs.add(command.getName());
         allArgs.addAll(Arrays.asList(args));
         return this.getCore().getCommandHandler().locateAndRunCommand(sender, allArgs);
@@ -122,7 +124,7 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
                 || (level == Level.FINEST && debugLevel >= 3)) {
             debugLog.log(level, msg);
         } else if (level != Level.FINE && level != Level.FINER && level != Level.FINEST) {
-            String message = new StringBuilder(getLogTag()).append(msg).toString();
+            String message = getLogTag() + msg;
             this.getServer().getLogger().log(level, message);
             debugLog.log(level, message);
         }
@@ -136,6 +138,7 @@ public abstract class MultiversePlugin extends JavaPlugin implements MVPlugin {
 
     /**
      * Sets the debug log-tag.
+     *
      * @param tag The new tag.
      */
     protected final void setDebugLogTag(String tag) {

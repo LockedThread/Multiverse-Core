@@ -10,6 +10,7 @@ package com.onarandombox.MultiverseCore.commands;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.BlockSafety;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.List;
-import org.bukkit.Bukkit;
 
 /**
  * Sets the spawn for a world.
@@ -40,8 +40,9 @@ public class SetSpawnCommand extends MultiverseCommand {
 
     /**
      * Dispatches the user's command depending on the number of parameters
+     *
      * @param sender The player who executes the command, may be console as well.
-     * @param args Command line parameters
+     * @param args   Command line parameters
      */
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
@@ -58,7 +59,8 @@ public class SetSpawnCommand extends MultiverseCommand {
 
     /**
      * Set the world spawn when no parameters are given
-     * @param sender The {@link CommandSender} who executes the command. 
+     *
+     * @param sender The {@link CommandSender} who executes the command.
      *               Everything not a {@link Player}, e.g. console, gets rejected, as we can't get coordinates from there.
      */
     protected void setWorldSpawn(CommandSender sender) {
@@ -71,14 +73,15 @@ public class SetSpawnCommand extends MultiverseCommand {
             sender.sendMessage("You need to give coordinates to use this command from the console!");
         }
     }
-    
+
     /**
      * Set the world spawn when 4 parameters are given
+     *
      * @param sender The {@link CommandSender} who executes the command
-     * @param world The world to set the spawn in
-     * @param x X-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
-     * @param y Y-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
-     * @param z Z-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param world  The world to set the spawn in
+     * @param x      X-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param y      Y-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param z      Z-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
      */
     protected void setWorldSpawn(CommandSender sender, String world, String x, String y, String z) {
         setWorldSpawn(sender, world, x, y, z, "0", "0");
@@ -86,13 +89,14 @@ public class SetSpawnCommand extends MultiverseCommand {
 
     /**
      * Set the world spawn when 6 parameters are given
+     *
      * @param sender The {@link CommandSender} who executes the command
-     * @param world The world to set the spawn in
-     * @param x X-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
-     * @param y Y-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
-     * @param z Z-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
-     * @param yaw Yaw a newly spawned player should look at (as a {@link String} as it's from the command line, gets parsed into a float)
-     * @param pitch Pitch a newly spawned player should look at (as a {@link String} as it's from the command line, gets parsed into a float)
+     * @param world  The world to set the spawn in
+     * @param x      X-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param y      Y-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param z      Z-coordinate to set the spawn to (as a {@link String} as it's from the command line, gets parsed into a double)
+     * @param yaw    Yaw a newly spawned player should look at (as a {@link String} as it's from the command line, gets parsed into a float)
+     * @param pitch  Pitch a newly spawned player should look at (as a {@link String} as it's from the command line, gets parsed into a float)
      */
     protected void setWorldSpawn(CommandSender sender, String world, String x, String y, String z, String yaw, String pitch) {
         double dx, dy, dz;
@@ -120,8 +124,8 @@ public class SetSpawnCommand extends MultiverseCommand {
      * Does the actual spawn-setting-work.
      *
      * @param sender The {@link CommandSender} that's setting the spawn.
-     * @param w The {@link World} to set the spawn in
-     * @param l The {@link Location} to set the spawn to
+     * @param w      The {@link World} to set the spawn in
+     * @param l      The {@link Location} to set the spawn to
      */
     private void setWorldSpawn(CommandSender sender, World w, Location l) {
         MultiverseWorld foundWorld = this.plugin.getMVWorldManager().getMVWorld(w.getName());

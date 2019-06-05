@@ -42,6 +42,24 @@ public class VaultHandler implements Listener {
     }
 
     /**
+     * Checks whether Vault is in use and has an economy system enabled.
+     *
+     * @return true if vault is in use and has an economy system enabled.
+     */
+    public boolean hasEconomy() {
+        return economy != null;
+    }
+
+    /**
+     * Returns the Vault economy system if Vault is present and has an economy system enabled.
+     *
+     * @return The vault economy system or null if not configured.
+     */
+    public Economy getEconomy() {
+        return economy;
+    }
+
+    /**
      * Listens for Vault plugin events.
      */
     private class VaultListener implements Listener {
@@ -59,23 +77,5 @@ public class VaultHandler implements Listener {
                 economy = null;
             }
         }
-    }
-
-    /**
-     * Checks whether Vault is in use and has an economy system enabled.
-     *
-     * @return true if vault is in use and has an economy system enabled.
-     */
-    public boolean hasEconomy() {
-        return economy != null;
-    }
-
-    /**
-     * Returns the Vault economy system if Vault is present and has an economy system enabled.
-     *
-     * @return The vault economy system or null if not configured.
-     */
-    public Economy getEconomy() {
-        return economy;
     }
 }

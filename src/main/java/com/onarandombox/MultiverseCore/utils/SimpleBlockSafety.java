@@ -14,20 +14,18 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.material.Bed;
 
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * The default-implementation of {@link BlockSafety}.
  */
 public class SimpleBlockSafety implements BlockSafety {
-    private final Core plugin;
     private static final Set<BlockFace> AROUND_BLOCK = EnumSet.noneOf(BlockFace.class);
 
     static {
@@ -41,8 +39,17 @@ public class SimpleBlockSafety implements BlockSafety {
         AROUND_BLOCK.add(BlockFace.NORTH_WEST);
     }
 
+    private final Core plugin;
+
     public SimpleBlockSafety(Core plugin) {
         this.plugin = plugin;
+    }
+
+    /*
+     * If someone has a better way of this... Please either tell us, or submit a pull request!
+     */
+    public static boolean isSolidBlock(Material type) {
+        return type.isSolid();
     }
 
     /**
@@ -131,13 +138,12 @@ public class SimpleBlockSafety implements BlockSafety {
 
     /**
      * Find a safe spawn around a location. (N,S,E,W,NE,NW,SE,SW)
+     *
      * @param l Location to check around
      * @return A safe location, or none if it wasn't found.
      */
     private Location getSafeSpawnAroundABlock(Location l) {
-        Iterator<BlockFace> checkblock = AROUND_BLOCK.iterator();
-        while (checkblock.hasNext()) {
-            final BlockFace face = checkblock.next();
+        for (BlockFace face : AROUND_BLOCK) {
             if (this.playerCanSpawnHereSafely(l.getBlock().getRelative(face).getLocation())) {
                 // Don't forget to center the player.
                 return l.getBlock().getRelative(face).getLocation().add(.5, 0, .5);
@@ -148,23 +154,23 @@ public class SimpleBlockSafety implements BlockSafety {
 
     /**
      * Find the other bed block.
+     *
      * @param checkLoc The location to check for the other piece at
      * @return The location of the other bed piece, or null if it was a jacked up bed.
      */
     private Location findOtherBedPiece(Location checkLoc) {
-        BlockData data = checkLoc.getBlock().getBlockData();
+        BlockState data = checkLoc.getBlock().getState();
         if (!(data instanceof Bed)) {
             return null;
         }
         Bed b = (Bed) data;
-
-        if (b.getPart() == Bed.Part.HEAD) {
+        if (b.isHeadOfBed()) {
             return checkLoc.getBlock().getRelative(b.getFacing().getOppositeFace()).getLocation();
+
         }
         // We shouldn't ever be looking at the foot, but here's the code for it.
         return checkLoc.getBlock().getRelative(b.getFacing()).getLocation();
     }
-
 
     /**
      * {@inheritDoc}
@@ -198,13 +204,6 @@ public class SimpleBlockSafety implements BlockSafety {
         return null;
     }
 
-    /*
-     * If someone has a better way of this... Please either tell us, or submit a pull request!
-     */
-    public static boolean isSolidBlock(Material type) {
-        return type.isSolid();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -213,7 +212,7 @@ public class SimpleBlockSafety implements BlockSafety {
         Material currentBlock = l.getBlock().getType();
         return (currentBlock == Material.POWERED_RAIL
                 || currentBlock == Material.DETECTOR_RAIL
-                || currentBlock == Material.RAIL
+                || currentBlock == Material.RAILS
                 || currentBlock == Material.ACTIVATOR_RAIL);
     }
 
@@ -248,10 +247,7 @@ public class SimpleBlockSafety implements BlockSafety {
         if (this.isBlockAboveAir(cart.getLocation())) {
             return true;
         }
-        if (this.isEntitiyOnTrack(plugin.getLocationManipulation().getNextBlock(cart))) {
-            return true;
-        }
-        return false;
+        return this.isEntitiyOnTrack(plugin.getLocationManipulation().getNextBlock(cart));
     }
 
     /**
@@ -259,10 +255,7 @@ public class SimpleBlockSafety implements BlockSafety {
      */
     @Override
     public boolean canSpawnVehicleSafely(Vehicle vehicle) {
-        if (this.isBlockAboveAir(vehicle.getLocation())) {
-            return true;
-        }
-        return false;
+        return this.isBlockAboveAir(vehicle.getLocation());
     }
 
 }

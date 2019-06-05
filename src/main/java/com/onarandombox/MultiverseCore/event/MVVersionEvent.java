@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public class MVVersionEvent extends Event {
 
+    private static final HandlerList HANDLERS = new HandlerList();
     private final StringBuilder versionInfoBuilder;
     private final Map<String, String> detailedVersionInfo;
 
@@ -18,7 +19,14 @@ public class MVVersionEvent extends Event {
         this.detailedVersionInfo = files;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of HANDLERS.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
@@ -29,15 +37,8 @@ public class MVVersionEvent extends Event {
     }
 
     /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of HANDLERS.
-     */
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
-    /**
      * Gets the version-info currently saved in this event.
+     *
      * @return The version-info.
      */
     public String getVersionInfo() {
@@ -46,11 +47,11 @@ public class MVVersionEvent extends Event {
 
     /**
      * Gets the key/value pair of the detailed version info.
-     *
+     * <p>
      * This information is used for advanced paste services that would prefer
      * to get the information as several files. Examples include config.yml or
      * portals.yml.
-     *
+     * <p>
      * The keys are filenames, the values are the contents of the files.
      *
      * @return The key value mapping of files and the contents of those files.
@@ -61,6 +62,7 @@ public class MVVersionEvent extends Event {
 
     /**
      * Appends more version-info to the version-info currently saved in this event.
+     *
      * @param moreVersionInfo The version-info to add. Should end with '\n'.
      */
     public void appendVersionInfo(String moreVersionInfo) {

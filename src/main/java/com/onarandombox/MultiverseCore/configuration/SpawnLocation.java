@@ -1,16 +1,16 @@
 package com.onarandombox.MultiverseCore.configuration;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Just like a regular {@link Location}, however {@code world} is usually {@code null}
@@ -33,6 +33,21 @@ public class SpawnLocation extends Location implements ConfigurationSerializable
     }
 
     /**
+     * Let Bukkit be able to deserialize this.
+     *
+     * @param args The map.
+     * @return The deserialized object.
+     */
+    public static SpawnLocation deserialize(Map<String, Object> args) {
+        double x = ((Number) args.get("x")).doubleValue();
+        double y = ((Number) args.get("y")).doubleValue();
+        double z = ((Number) args.get("z")).doubleValue();
+        float pitch = ((Number) args.get("pitch")).floatValue();
+        float yaw = ((Number) args.get("yaw")).floatValue();
+        return new SpawnLocation(x, y, z, yaw, pitch);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -45,7 +60,7 @@ public class SpawnLocation extends Location implements ConfigurationSerializable
      */
     @Override
     public void setWorld(World world) {
-        this.worldRef = new WeakReference<World>(world);
+        this.worldRef = new WeakReference<>(world);
     }
 
     /**
@@ -73,26 +88,12 @@ public class SpawnLocation extends Location implements ConfigurationSerializable
      */
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> serialized = new HashMap<String, Object>(5); // SUPPRESS CHECKSTYLE: MagicNumberCheck
+        Map<String, Object> serialized = new HashMap<>(5); // SUPPRESS CHECKSTYLE: MagicNumberCheck
         serialized.put("x", this.getX());
         serialized.put("y", this.getY());
         serialized.put("z", this.getZ());
         serialized.put("pitch", this.getPitch());
         serialized.put("yaw", this.getYaw());
         return serialized;
-    }
-
-    /**
-     * Let Bukkit be able to deserialize this.
-     * @param args The map.
-     * @return The deserialized object.
-     */
-    public static SpawnLocation deserialize(Map<String, Object> args) {
-        double x = ((Number) args.get("x")).doubleValue();
-        double y = ((Number) args.get("y")).doubleValue();
-        double z = ((Number) args.get("z")).doubleValue();
-        float pitch = ((Number) args.get("pitch")).floatValue();
-        float yaw = ((Number) args.get("yaw")).floatValue();
-        return new SpawnLocation(x, y, z, yaw, pitch);
     }
 }

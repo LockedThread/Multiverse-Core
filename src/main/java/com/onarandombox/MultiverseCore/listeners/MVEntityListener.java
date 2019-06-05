@@ -27,8 +27,8 @@ import java.util.logging.Level;
  * Multiverse's Entity {@link Listener}.
  */
 public class MVEntityListener implements Listener {
-    private MultiverseCore plugin;
-    private MVWorldManager worldManager;
+    private final MultiverseCore plugin;
+    private final MVWorldManager worldManager;
 
     public MVEntityListener(MultiverseCore plugin) {
         this.plugin = plugin;
@@ -37,6 +37,7 @@ public class MVEntityListener implements Listener {
 
     /**
      * This method is called when an entity's food level goes higher or lower.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -58,6 +59,7 @@ public class MVEntityListener implements Listener {
 
     /**
      * This method is called when an entity's health goes up or down.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -74,6 +76,7 @@ public class MVEntityListener implements Listener {
 
     /**
      * Handle Animal/Monster Spawn settings, seems like a more concrete method than using CraftBukkit.
+     *
      * @param event The event.
      */
     @EventHandler

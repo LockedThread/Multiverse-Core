@@ -7,12 +7,11 @@
 
 package com.onarandombox.MultiverseCore.listeners;
 
-import java.util.logging.Level;
-
+import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerChatEvent;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
+import java.util.logging.Level;
 
 /**
  * Multiverse's {@link org.bukkit.event.Listener} for players.
@@ -26,6 +25,7 @@ public class MVPlayerChatListener extends MVChatListener {
 
     /**
      * This method is called when a player wants to chat.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler

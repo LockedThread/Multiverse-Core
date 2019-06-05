@@ -13,16 +13,7 @@ import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.onarandombox.MultiverseCore.api.WorldPurger;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Golem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Squid;
+import org.bukkit.entity.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +24,7 @@ import java.util.List;
  */
 public class SimpleWorldPurger implements WorldPurger {
 
-    private MultiverseCore plugin;
+    private final MultiverseCore plugin;
 
     private Class<Entity> ambientClass = null;
 
@@ -44,7 +35,8 @@ public class SimpleWorldPurger implements WorldPurger {
             if (Entity.class.isAssignableFrom(entityClass)) {
                 ambientClass = entityClass;
             }
-        } catch (ClassNotFoundException ignore) { }
+        } catch (ClassNotFoundException ignore) {
+        }
     }
 
     /**
@@ -68,7 +60,7 @@ public class SimpleWorldPurger implements WorldPurger {
         if (world == null) {
             return;
         }
-        ArrayList<String> allMobs = new ArrayList<String>(world.getAnimalList());
+        ArrayList<String> allMobs = new ArrayList<>(world.getAnimalList());
         allMobs.addAll(world.getMonsterList());
         purgeWorld(world, allMobs, !world.canAnimalsSpawn(), !world.canMonstersSpawn());
     }
@@ -78,7 +70,7 @@ public class SimpleWorldPurger implements WorldPurger {
      */
     @Override
     public boolean shouldWeKillThisCreature(MultiverseWorld world, Entity e) {
-        ArrayList<String> allMobs = new ArrayList<String>(world.getAnimalList());
+        ArrayList<String> allMobs = new ArrayList<>(world.getAnimalList());
         allMobs.addAll(world.getMonsterList());
         return this.shouldWeKillThisCreature(e, allMobs, !world.canAnimalsSpawn(), !world.canMonstersSpawn());
     }
@@ -88,7 +80,7 @@ public class SimpleWorldPurger implements WorldPurger {
      */
     @Override
     public void purgeWorld(MultiverseWorld mvworld, List<String> thingsToKill,
-            boolean negateAnimals, boolean negateMonsters, CommandSender sender) {
+                           boolean negateAnimals, boolean negateMonsters, CommandSender sender) {
         if (mvworld == null) {
             return;
         }
@@ -102,8 +94,8 @@ public class SimpleWorldPurger implements WorldPurger {
         boolean specifiedAnimals = thingsToKill.contains("ANIMALS") || specifiedAll;
         boolean specifiedMonsters = thingsToKill.contains("MONSTERS") || specifiedAll;
         List<Entity> worldEntities = world.getEntities();
-        List<LivingEntity> livingEntities = new ArrayList<LivingEntity>(worldEntities.size());
-        List<Projectile> projectiles = new ArrayList<Projectile>(worldEntities.size());
+        List<LivingEntity> livingEntities = new ArrayList<>(worldEntities.size());
+        List<Projectile> projectiles = new ArrayList<>(worldEntities.size());
         for (final Entity e : worldEntities) {
             if (e instanceof Projectile) {
                 final Projectile p = (Projectile) e;
@@ -135,7 +127,7 @@ public class SimpleWorldPurger implements WorldPurger {
     }
 
     private boolean killDecision(Entity e, List<String> thingsToKill, boolean negateAnimals,
-            boolean negateMonsters, boolean specifiedAnimals, boolean specifiedMonsters) {
+                                 boolean negateMonsters, boolean specifiedAnimals, boolean specifiedMonsters) {
         boolean negate = false;
         boolean specified = false;
         if (e instanceof Golem || e instanceof Squid || e instanceof Animals

@@ -30,7 +30,7 @@ public enum AllowedPortalType {
      */
     END(PortalType.ENDER);
 
-    private PortalType type;
+    private final PortalType type;
 
     AllowedPortalType(PortalType type) {
         this.type = type;
@@ -38,6 +38,7 @@ public enum AllowedPortalType {
 
     /**
      * Gets the text.
+     *
      * @return The text.
      */
     public PortalType getActualPortalType() {

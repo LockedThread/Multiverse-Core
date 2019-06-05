@@ -7,13 +7,7 @@
 
 package com.onarandombox.MultiverseCore.listeners;
 
-import com.onarandombox.MultiverseCore.event.MVConfigReloadEvent;
-import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
-import com.onarandombox.MultiverseCore.event.MVRespawnEvent;
-import com.onarandombox.MultiverseCore.event.MVTeleportEvent;
-import com.onarandombox.MultiverseCore.event.MVVersionEvent;
-import com.onarandombox.MultiverseCore.event.MVWorldDeleteEvent;
-import com.onarandombox.MultiverseCore.event.MVWorldPropertyChangeEvent;
+import com.onarandombox.MultiverseCore.event.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -23,6 +17,7 @@ import org.bukkit.event.Listener;
 public abstract class MultiverseCoreListener implements Listener {
     /**
      * Called when a {@link MVWorldPropertyChangeEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -31,6 +26,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVWorldDeleteEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -39,6 +35,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVVersionEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -47,6 +44,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVTeleportEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -55,6 +53,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVRespawnEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -63,6 +62,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVPlayerTouchedPortalEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler
@@ -71,6 +71,7 @@ public abstract class MultiverseCoreListener implements Listener {
 
     /**
      * Called when a {@link MVConfigReloadEvent} is fired.
+     *
      * @param event The event.
      */
     @EventHandler

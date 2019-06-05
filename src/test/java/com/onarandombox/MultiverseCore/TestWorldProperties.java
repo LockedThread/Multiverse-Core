@@ -52,8 +52,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.File;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
@@ -85,7 +83,7 @@ public class TestWorldProperties {
     private FoodLevelChangeEvent entityFoodLevelRiseEvent;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         creator = new TestInstanceCreator();
         assertTrue(creator.setUp());
         core = creator.getCore();
@@ -93,7 +91,7 @@ public class TestWorldProperties {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         creator.tearDown();
     }
 
@@ -213,7 +211,7 @@ public class TestWorldProperties {
          *     Modify & Verify
          * ************************ */
         mvWorld.setHidden(true);
-        assertEquals(true, mvWorld.isHidden());
+        assertTrue(mvWorld.isHidden());
         mvWorld.setAlias("alias");
         assertEquals("alias", mvWorld.getAlias());
         assertTrue(mvWorld.setColor("BLACK"));
@@ -221,7 +219,7 @@ public class TestWorldProperties {
         assertEquals(ChatColor.BLACK, mvWorld.getColor());
         assertEquals(ChatColor.BLACK.toString() + "alias" + ChatColor.WHITE.toString(), mvWorld.getColoredWorldString());
         mvWorld.setPVPMode(false);
-        assertEquals(false, mvWorld.isPVPEnabled());
+        assertFalse(mvWorld.isPVPEnabled());
         assertTrue(mvWorld.setScaling(2D));
         assertEquals(2D, mvWorld.getScaling(), 0);
         assertFalse(mvWorld.setRespawnToWorld("INVALID WORLD"));
@@ -229,31 +227,31 @@ public class TestWorldProperties {
         assertSame(worldManager.getMVWorld("world_nether").getCBWorld(),
                 mvWorld.getRespawnToWorld());
         mvWorld.setEnableWeather(false);
-        assertEquals(false, mvWorld.isWeatherEnabled());
+        assertFalse(mvWorld.isWeatherEnabled());
         assertTrue(mvWorld.setDifficulty(Difficulty.PEACEFUL));
         assertEquals(Difficulty.PEACEFUL, mvWorld.getDifficulty());
         mvWorld.setAllowAnimalSpawn(false);
-        assertEquals(false, mvWorld.canAnimalsSpawn());
+        assertFalse(mvWorld.canAnimalsSpawn());
         mvWorld.setAllowMonsterSpawn(false);
-        assertEquals(false, mvWorld.canMonstersSpawn());
+        assertFalse(mvWorld.canMonstersSpawn());
         mvWorld.setCurrency(Material.STONE);
         assertEquals(Material.STONE, mvWorld.getCurrency());
         mvWorld.setPrice(1D);
         assertEquals(1D, mvWorld.getPrice(), 0);
         mvWorld.setHunger(false);
-        assertEquals(false, mvWorld.getHunger());
+        assertFalse(mvWorld.getHunger());
         mvWorld.setAutoHeal(false);
-        assertEquals(false, mvWorld.getAutoHeal());
+        assertFalse(mvWorld.getAutoHeal());
         mvWorld.setAdjustSpawn(false);
-        assertEquals(false, mvWorld.getAdjustSpawn());
+        assertFalse(mvWorld.getAdjustSpawn());
         assertTrue(mvWorld.setGameMode(GameMode.CREATIVE));
         assertEquals(GameMode.CREATIVE, mvWorld.getGameMode());
         mvWorld.setKeepSpawnInMemory(false);
-        assertEquals(false, mvWorld.isKeepingSpawnInMemory());
+        assertFalse(mvWorld.isKeepingSpawnInMemory());
         mvWorld.setBedRespawn(false);
-        assertEquals(false, mvWorld.getBedRespawn());
+        assertFalse(mvWorld.getBedRespawn());
         mvWorld.setAutoLoad(false);
-        assertEquals(false, mvWorld.getAutoLoad());
+        assertFalse(mvWorld.getAutoLoad());
         mvWorld.setSpawnLocation(new Location(mvWorld.getCBWorld(), 1, 1, 1));
         assertEquals(new SpawnLocation(1, 1, 1), mvWorld.getSpawnLocation());
 
@@ -323,27 +321,27 @@ public class TestWorldProperties {
         core.loadConfigs();
 
         mvWorld = worldManager.getMVWorld("world");
-        assertEquals(true, mvWorld.isHidden());
+        assertTrue(mvWorld.isHidden());
         assertEquals("alias", mvWorld.getAlias());
         assertEquals(ChatColor.GREEN, mvWorld.getColor());
         assertEquals(ChatColor.GREEN.toString() + "alias" + ChatColor.WHITE.toString(), mvWorld.getColoredWorldString());
-        assertEquals(false, mvWorld.isPVPEnabled());
+        assertFalse(mvWorld.isPVPEnabled());
         assertEquals(2D, mvWorld.getScaling(), 0);
         assertSame(worldManager.getMVWorld("world_nether").getCBWorld(),
                 mvWorld.getRespawnToWorld());
-        assertEquals(false, mvWorld.isWeatherEnabled());
+        assertFalse(mvWorld.isWeatherEnabled());
         assertEquals(Difficulty.PEACEFUL, mvWorld.getDifficulty());
-        assertEquals(false, mvWorld.canAnimalsSpawn());
-        assertEquals(false, mvWorld.canMonstersSpawn());
+        assertFalse(mvWorld.canAnimalsSpawn());
+        assertFalse(mvWorld.canMonstersSpawn());
         assertEquals(Material.STONE, mvWorld.getCurrency());
         assertEquals(1D, mvWorld.getPrice(), 0);
-        assertEquals(false, mvWorld.getHunger());
-        assertEquals(false, mvWorld.getAutoHeal());
-        assertEquals(false, mvWorld.getAdjustSpawn());
+        assertFalse(mvWorld.getHunger());
+        assertFalse(mvWorld.getAutoHeal());
+        assertFalse(mvWorld.getAdjustSpawn());
         assertEquals(GameMode.CREATIVE, mvWorld.getGameMode());
-        assertEquals(false, mvWorld.isKeepingSpawnInMemory());
-        assertEquals(false, mvWorld.getBedRespawn());
-        assertEquals(false, mvWorld.getAutoLoad());
+        assertFalse(mvWorld.isKeepingSpawnInMemory());
+        assertFalse(mvWorld.getBedRespawn());
+        assertFalse(mvWorld.getAutoLoad());
         assertEquals(new SpawnLocation(1, 1, 1), mvWorld.getSpawnLocation());
     }
 

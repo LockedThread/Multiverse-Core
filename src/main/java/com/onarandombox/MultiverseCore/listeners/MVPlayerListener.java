@@ -7,10 +7,6 @@
 
 package com.onarandombox.MultiverseCore.listeners;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-
 import com.dumptruckman.minecraft.util.Logging;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
@@ -26,12 +22,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * Multiverse's {@link Listener} for players.
@@ -41,7 +36,7 @@ public class MVPlayerListener implements Listener {
     private final MVWorldManager worldManager;
     private final PermissionTools pt;
 
-    private final Map<String, String> playerWorld = new ConcurrentHashMap<String, String>();
+    private final Map<String, String> playerWorld = new ConcurrentHashMap<>();
 
     public MVPlayerListener(MultiverseCore plugin) {
         this.plugin = plugin;
@@ -58,6 +53,7 @@ public class MVPlayerListener implements Listener {
 
     /**
      * This method is called when a player respawns.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
@@ -104,6 +100,7 @@ public class MVPlayerListener implements Listener {
 
     /**
      * This method is called when a player joins the server.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -132,6 +129,7 @@ public class MVPlayerListener implements Listener {
 
     /**
      * This method is called when a player changes worlds.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler(priority = EventPriority.MONITOR)
@@ -143,6 +141,7 @@ public class MVPlayerListener implements Listener {
 
     /**
      * This method is called when a player quits the game.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -152,6 +151,7 @@ public class MVPlayerListener implements Listener {
 
     /**
      * This method is called when a player teleports anywhere.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -242,6 +242,7 @@ public class MVPlayerListener implements Listener {
     /**
      * This method is called to adjust the portal location to the actual portal location (and not
      * right outside of it.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler(priority = EventPriority.LOWEST)
@@ -252,7 +253,7 @@ public class MVPlayerListener implements Listener {
 
         // REMEMBER! getTo MAY be NULL HERE!!!
         // If the player was actually outside of the portal, adjust the from location
-        if (event.getFrom().getWorld().getBlockAt(event.getFrom()).getType() != Material.NETHER_PORTAL) {
+        if (event.getFrom().getWorld().getBlockAt(event.getFrom()).getType() != Material.PORTAL) {
             Location newloc = this.plugin.getSafeTTeleporter().findPortalBlockNextTo(event.getFrom());
             // TODO: Fix this. Currently, we only check for PORTAL blocks. I'll have to figure out what
             // TODO: we want to do here.
@@ -262,11 +263,12 @@ public class MVPlayerListener implements Listener {
         }
         // Wait for the adjust, then return!
         if (event.getTo() == null) {
-            return;
         }
     }
+
     /**
      * This method is called when a player actually portals via a vanilla style portal.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler(priority = EventPriority.HIGH)
@@ -320,12 +322,7 @@ public class MVPlayerListener implements Listener {
     private void sendPlayerToDefaultWorld(final Player player) {
         // Remove the player 1 tick after the login. I'm sure there's GOT to be a better way to do this...
         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin,
-            new Runnable() {
-                @Override
-                public void run() {
-                    player.teleport(plugin.getMVWorldManager().getFirstSpawnWorld().getSpawnLocation());
-                }
-            }, 1L);
+                () -> player.teleport(plugin.getMVWorldManager().getFirstSpawnWorld().getSpawnLocation()), 1L);
     }
 
     // FOLLOWING 2 Methods and Private class handle Per Player GameModes.
@@ -342,42 +339,40 @@ public class MVPlayerListener implements Listener {
 
     /**
      * Handles the gamemode for the specified {@link Player}.
+     *
      * @param player The {@link Player}.
-     * @param world The world the player is in.
+     * @param world  The world the player is in.
      */
     public void handleGameModeAndFlight(final Player player, final MultiverseWorld world) {
         // We perform this task one tick later to MAKE SURE that the player actually reaches the
         // destination world, otherwise we'd be changing the player mode if they havent moved anywhere.
         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!MVPlayerListener.this.pt.playerCanIgnoreGameModeRestriction(world, player)) {
-                            // Check that the player is in the new world and they haven't been teleported elsewhere or the event cancelled.
-                            if (player.getWorld() == world.getCBWorld()) {
-                                Logging.fine("Handling gamemode for player: %s, Changing to %s", player.getName(), world.getGameMode().toString());
-                                Logging.finest("From World: %s", player.getWorld());
-                                Logging.finest("To World: %s", world);
-                                player.setGameMode(world.getGameMode());
-                                // Check if their flight mode should change
-                                // TODO need a override permission for this
-                                if (player.getAllowFlight() && !world.getAllowFlight() && player.getGameMode() != GameMode.CREATIVE) {
-                                    player.setAllowFlight(false);
-                                    if (player.isFlying()) {
-                                        player.setFlying(false);
-                                    }
-                                } else if (world.getAllowFlight()) {
-                                    if (player.getGameMode() == GameMode.CREATIVE) {
-                                        player.setAllowFlight(true);
-                                    }
+                () -> {
+                    if (!MVPlayerListener.this.pt.playerCanIgnoreGameModeRestriction(world, player)) {
+                        // Check that the player is in the new world and they haven't been teleported elsewhere or the event cancelled.
+                        if (player.getWorld() == world.getCBWorld()) {
+                            Logging.fine("Handling gamemode for player: %s, Changing to %s", player.getName(), world.getGameMode().toString());
+                            Logging.finest("From World: %s", player.getWorld());
+                            Logging.finest("To World: %s", world);
+                            player.setGameMode(world.getGameMode());
+                            // Check if their flight mode should change
+                            // TODO need a override permission for this
+                            if (player.getAllowFlight() && !world.getAllowFlight() && player.getGameMode() != GameMode.CREATIVE) {
+                                player.setAllowFlight(false);
+                                if (player.isFlying()) {
+                                    player.setFlying(false);
                                 }
-                            } else {
-                                Logging.fine("The gamemode/allowfly was NOT changed for player '%s' because he is now in world '%s' instead of world '%s'",
-                                        player.getName(), player.getWorld().getName(), world.getName());
+                            } else if (world.getAllowFlight()) {
+                                if (player.getGameMode() == GameMode.CREATIVE) {
+                                    player.setAllowFlight(true);
+                                }
                             }
                         } else {
-                            MVPlayerListener.this.plugin.log(Level.FINE, "Player: " + player.getName() + " is IMMUNE to gamemode changes!");
+                            Logging.fine("The gamemode/allowfly was NOT changed for player '%s' because he is now in world '%s' instead of world '%s'",
+                                    player.getName(), player.getWorld().getName(), world.getName());
                         }
+                    } else {
+                        MVPlayerListener.this.plugin.log(Level.FINE, "Player: " + player.getName() + " is IMMUNE to gamemode changes!");
                     }
                 }, 1L);
     }

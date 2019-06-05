@@ -20,15 +20,7 @@ import com.onarandombox.MultiverseCore.exceptions.PropertyDoesNotExistException;
 import me.main__.util.SerializationConfig.ChangeDeniedException;
 import me.main__.util.SerializationConfig.NoSuchPropertyException;
 import me.main__.util.SerializationConfig.VirtualProperty;
-import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.WorldType;
-import org.bukkit.command.CommandSender;
+import org.bukkit.*;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -54,6 +46,10 @@ public class MVWorld implements MultiverseWorld {
     private final String name; // The Worlds Name, EG its folder name.
     private final UUID worldUID;
     private final WorldProperties props;
+    private Permission permission;
+    private Permission exempt;
+    private Permission ignoreperm;
+    private Permission limitbypassperm;
 
     public MVWorld(MultiverseCore plugin, World world, WorldProperties properties) {
         this(plugin, world, properties, true);
@@ -207,184 +203,6 @@ public class MVWorld implements MultiverseWorld {
     }
 
     /**
-     * Validates the scale-property.
-     */
-    private final class ScalePropertyValidator extends WorldPropertyValidator<Double> {
-        @Override
-        public Double validateChange(String property, Double newValue, Double oldValue,
-                MVWorld object) throws ChangeDeniedException {
-            if (newValue <= 0) {
-                plugin.log(Level.FINE, "Someone tried to set a scale <= 0, aborting!");
-                throw new ChangeDeniedException();
-            }
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-    /**
-     * Validates the respawnWorld-property.
-     */
-    private final class RespawnWorldPropertyValidator extends WorldPropertyValidator<String> {
-        @Override
-        public String validateChange(String property, String newValue, String oldValue,
-                MVWorld object) throws ChangeDeniedException {
-            if (!newValue.isEmpty() && !plugin.getMVWorldManager().isMVWorld(newValue))
-                throw new ChangeDeniedException();
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-
-
-    /**
-     * Used to apply the allowWeather-property.
-     */
-    private final class AllowWeatherPropertyValidator extends WorldPropertyValidator<Boolean> {
-        @Override
-        public Boolean validateChange(String property, Boolean newValue, Boolean oldValue,
-                MVWorld object) throws ChangeDeniedException {
-            if (!newValue) {
-                final World world = getCBWorld();
-                if (world != null) {
-                    world.setStorm(false);
-                    world.setThundering(false);
-                }
-            }
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-    /**
-     * Used to apply the spawning-property.
-     */
-    private final class SpawningPropertyValidator extends WorldPropertyValidator<SpawnSettings> {
-        @Override
-        public SpawnSettings validateChange(String property, SpawnSettings newValue, SpawnSettings oldValue,
-                                      MVWorld object) throws ChangeDeniedException {
-            boolean allowMonsters, allowAnimals;
-            if (getAnimalList().isEmpty()) {
-                allowAnimals = canAnimalsSpawn();
-            } else {
-                allowAnimals = true;
-            }
-            if (getMonsterList().isEmpty()) {
-                allowMonsters = canMonstersSpawn();
-            } else {
-                allowMonsters = true;
-            }
-            final World world = getCBWorld();
-            if (world != null) {
-                if (MVWorld.this.props.getAnimalSpawnRate() != -1) {
-                    world.setTicksPerAnimalSpawns(MVWorld.this.props.getAnimalSpawnRate());
-                }
-                if (MVWorld.this.props.getMonsterSpawnRate() != -1) {
-                    world.setTicksPerMonsterSpawns(MVWorld.this.props.getMonsterSpawnRate());
-                }
-                world.setSpawnFlags(allowMonsters, allowAnimals);
-            }
-            if (MultiverseCoreConfiguration.getInstance().isAutoPurgeEnabled()) {
-                plugin.getMVWorldManager().getTheWorldPurger().purgeWorld(MVWorld.this);
-            }
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-    /**
-     * Used to apply the gameMode-property.
-     */
-    private final class GameModePropertyValidator extends WorldPropertyValidator<GameMode> {
-        @Override
-        public GameMode validateChange(String property, GameMode newValue, GameMode oldValue,
-                MVWorld object) throws ChangeDeniedException {
-            for (Player p : plugin.getServer().getWorld(getName()).getPlayers()) {
-                plugin.log(Level.FINER, String.format("Setting %s's GameMode to %s",
-                        p.getName(), newValue.toString()));
-                plugin.getPlayerListener().handleGameModeAndFlight(p, MVWorld.this);
-            }
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-    /**
-     * Validator for the spawnLocation-property.
-     */
-    private final class SpawnLocationPropertyValidator extends WorldPropertyValidator<Location> {
-        @Override
-        public Location validateChange(String property, Location newValue, Location oldValue,
-                MVWorld object) throws ChangeDeniedException {
-            if (newValue == null)
-                throw new ChangeDeniedException();
-            if (props.getAdjustSpawn()) {
-                BlockSafety bs = plugin.getBlockSafety();
-                // verify that the location is safe
-                if (!bs.playerCanSpawnHereSafely(newValue)) {
-                    // it's not ==> find a better one!
-                    plugin.log(Level.WARNING, String.format("Somebody tried to set the spawn location for '%s' to an unsafe value! Adjusting...", getAlias()));
-                    plugin.log(Level.WARNING, "Old Location: " + plugin.getLocationManipulation().strCoordsRaw(oldValue));
-                    plugin.log(Level.WARNING, "New (unsafe) Location: " + plugin.getLocationManipulation().strCoordsRaw(newValue));
-                    SafeTTeleporter teleporter = plugin.getSafeTTeleporter();
-                    newValue = teleporter.getSafeLocation(newValue, SPAWN_LOCATION_SEARCH_TOLERANCE, SPAWN_LOCATION_SEARCH_RADIUS);
-                    if (newValue == null) {
-                        plugin.log(Level.WARNING, "Couldn't fix the location. I have to abort the spawn location-change :/");
-                        throw new ChangeDeniedException();
-                    }
-                    plugin.log(Level.WARNING, "New (safe) Location: " + plugin.getLocationManipulation().strCoordsRaw(newValue));
-                }
-            }
-            return super.validateChange(property, newValue, oldValue, object);
-        }
-    }
-
-    private Permission permission;
-    private Permission exempt;
-    private Permission ignoreperm;
-    private Permission limitbypassperm;
-
-    /**
-     * Null-location.
-     */
-    @SerializableAs("MVNullLocation (It's a bug if you see this in your config file)")
-    public static final class NullLocation extends SpawnLocation {
-        public NullLocation() {
-            super(0, -1, 0);
-        }
-
-        @Override
-        public Location clone() {
-            throw new UnsupportedOperationException();
-        };
-
-        @Override
-        public Map<String, Object> serialize() {
-            return Collections.EMPTY_MAP;
-        }
-
-        /**
-         * Let Bukkit be able to deserialize this.
-         * @param args The map.
-         * @return The deserialized object.
-         */
-        public static NullLocation deserialize(Map<String, Object> args) {
-            return new NullLocation();
-        }
-
-        @Override
-        public Vector toVector() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public int hashCode() {
-            return -1;
-        };
-
-        @Override
-        public String toString() {
-            return "NULL LOCATION";
-        };
-    }
-
-    /**
      * Initializes permissions.
      */
     private void initPerms() {
@@ -485,6 +303,7 @@ public class MVWorld implements MultiverseWorld {
 
     /**
      * Copies all properties from another {@link MVWorld} object.
+     *
      * @param other The other world object.
      */
     public void copyValues(MVWorld other) {
@@ -493,6 +312,7 @@ public class MVWorld implements MultiverseWorld {
 
     /**
      * Copies all properties from a {@link WorldProperties} object.
+     *
      * @param other The world properties object.
      */
     public void copyValues(WorldProperties other) {
@@ -655,7 +475,7 @@ public class MVWorld implements MultiverseWorld {
      * {@inheritDoc}
      */
     @Override
-    public Environment getEnvironment() {
+    public World.Environment getEnvironment() {
         return this.props.getEnvironment();
     }
 
@@ -663,7 +483,7 @@ public class MVWorld implements MultiverseWorld {
      * {@inheritDoc}
      */
     @Override
-    public void setEnvironment(Environment environment) {
+    public void setEnvironment(World.Environment environment) {
         this.props.setEnvironment(environment);
     }
 
@@ -1089,14 +909,6 @@ public class MVWorld implements MultiverseWorld {
      * {@inheritDoc}
      */
     @Override
-    public void setAdjustSpawn(boolean adjust) {
-        this.props.setAdjustSpawn(adjust);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean getAdjustSpawn() {
         return this.props.getAdjustSpawn();
     }
@@ -1105,8 +917,8 @@ public class MVWorld implements MultiverseWorld {
      * {@inheritDoc}
      */
     @Override
-    public void setAutoLoad(boolean load) {
-        this.props.setAutoLoad(load);
+    public void setAdjustSpawn(boolean adjust) {
+        this.props.setAdjustSpawn(adjust);
     }
 
     /**
@@ -1121,8 +933,8 @@ public class MVWorld implements MultiverseWorld {
      * {@inheritDoc}
      */
     @Override
-    public void setBedRespawn(boolean respawn) {
-        this.props.setBedRespawn(respawn);
+    public void setAutoLoad(boolean load) {
+        this.props.setAutoLoad(load);
     }
 
     /**
@@ -1131,6 +943,14 @@ public class MVWorld implements MultiverseWorld {
     @Override
     public boolean getBedRespawn() {
         return this.props.getBedRespawn();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBedRespawn(boolean respawn) {
+        this.props.setBedRespawn(respawn);
     }
 
     /**
@@ -1215,5 +1035,177 @@ public class MVWorld implements MultiverseWorld {
         final JSONObject topLevel = new JSONObject();
         topLevel.put(getClass().getSimpleName() + "@" + hashCode(), jsonData);
         return topLevel.toString();
+    }
+
+    /**
+     * Null-location.
+     */
+    @SerializableAs("MVNullLocation (It's a bug if you see this in your config file)")
+    public static final class NullLocation extends SpawnLocation {
+        public NullLocation() {
+            super(0, -1, 0);
+        }
+
+        /**
+         * Let Bukkit be able to deserialize this.
+         *
+         * @param args The map.
+         * @return The deserialized object.
+         */
+        public static NullLocation deserialize(Map<String, Object> args) {
+            return new NullLocation();
+        }
+
+        @Override
+        public Location clone() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Map<String, Object> serialize() {
+            return Collections.emptyMap();
+        }
+
+        @Override
+        public Vector toVector() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int hashCode() {
+            return -1;
+        }
+
+        @Override
+        public String toString() {
+            return "NULL LOCATION";
+        }
+    }
+
+    /**
+     * Validates the scale-property.
+     */
+    private final class ScalePropertyValidator extends WorldPropertyValidator<Double> {
+        @Override
+        public Double validateChange(String property, Double newValue, Double oldValue,
+                                     MVWorld object) throws ChangeDeniedException {
+            if (newValue <= 0) {
+                plugin.log(Level.FINE, "Someone tried to set a scale <= 0, aborting!");
+                throw new ChangeDeniedException();
+            }
+            return super.validateChange(property, newValue, oldValue, object);
+        }
+    }
+
+    /**
+     * Validates the respawnWorld-property.
+     */
+    private final class RespawnWorldPropertyValidator extends WorldPropertyValidator<String> {
+        @Override
+        public String validateChange(String property, String newValue, String oldValue,
+                                     MVWorld object) throws ChangeDeniedException {
+            if (!newValue.isEmpty() && !plugin.getMVWorldManager().isMVWorld(newValue))
+                throw new ChangeDeniedException();
+            return super.validateChange(property, newValue, oldValue, object);
+        }
+    }
+
+    /**
+     * Used to apply the allowWeather-property.
+     */
+    private final class AllowWeatherPropertyValidator extends WorldPropertyValidator<Boolean> {
+        @Override
+        public Boolean validateChange(String property, Boolean newValue, Boolean oldValue,
+                                      MVWorld object) throws ChangeDeniedException {
+            if (!newValue) {
+                final World world = getCBWorld();
+                if (world != null) {
+                    world.setStorm(false);
+                    world.setThundering(false);
+                }
+            }
+            return super.validateChange(property, newValue, oldValue, object);
+        }
+    }
+
+    /**
+     * Used to apply the spawning-property.
+     */
+    private final class SpawningPropertyValidator extends WorldPropertyValidator<SpawnSettings> {
+        @Override
+        public SpawnSettings validateChange(String property, SpawnSettings newValue, SpawnSettings oldValue,
+                                            MVWorld object) throws ChangeDeniedException {
+            boolean allowMonsters, allowAnimals;
+            if (getAnimalList().isEmpty()) {
+                allowAnimals = canAnimalsSpawn();
+            } else {
+                allowAnimals = true;
+            }
+            if (getMonsterList().isEmpty()) {
+                allowMonsters = canMonstersSpawn();
+            } else {
+                allowMonsters = true;
+            }
+            final World world = getCBWorld();
+            if (world != null) {
+                if (MVWorld.this.props.getAnimalSpawnRate() != -1) {
+                    world.setTicksPerAnimalSpawns(MVWorld.this.props.getAnimalSpawnRate());
+                }
+                if (MVWorld.this.props.getMonsterSpawnRate() != -1) {
+                    world.setTicksPerMonsterSpawns(MVWorld.this.props.getMonsterSpawnRate());
+                }
+                world.setSpawnFlags(allowMonsters, allowAnimals);
+            }
+            if (MultiverseCoreConfiguration.getInstance().isAutoPurgeEnabled()) {
+                plugin.getMVWorldManager().getTheWorldPurger().purgeWorld(MVWorld.this);
+            }
+            return super.validateChange(property, newValue, oldValue, object);
+        }
+    }
+
+    /**
+     * Used to apply the gameMode-property.
+     */
+    private final class GameModePropertyValidator extends WorldPropertyValidator<GameMode> {
+        @Override
+        public GameMode validateChange(String property, GameMode newValue, GameMode oldValue,
+                                       MVWorld object) throws ChangeDeniedException {
+            for (Player p : plugin.getServer().getWorld(getName()).getPlayers()) {
+                plugin.log(Level.FINER, String.format("Setting %s's GameMode to %s",
+                        p.getName(), newValue.toString()));
+                plugin.getPlayerListener().handleGameModeAndFlight(p, MVWorld.this);
+            }
+            return super.validateChange(property, newValue, oldValue, object);
+        }
+    }
+
+    /**
+     * Validator for the spawnLocation-property.
+     */
+    private final class SpawnLocationPropertyValidator extends WorldPropertyValidator<Location> {
+        @Override
+        public Location validateChange(String property, Location newValue, Location oldValue,
+                                       MVWorld object) throws ChangeDeniedException {
+            if (newValue == null)
+                throw new ChangeDeniedException();
+            if (props.getAdjustSpawn()) {
+                BlockSafety bs = plugin.getBlockSafety();
+                // verify that the location is safe
+                if (!bs.playerCanSpawnHereSafely(newValue)) {
+                    // it's not ==> find a better one!
+                    plugin.log(Level.WARNING, String.format("Somebody tried to set the spawn location for '%s' to an unsafe value! Adjusting...", getAlias()));
+                    plugin.log(Level.WARNING, "Old Location: " + plugin.getLocationManipulation().strCoordsRaw(oldValue));
+                    plugin.log(Level.WARNING, "New (unsafe) Location: " + plugin.getLocationManipulation().strCoordsRaw(newValue));
+                    SafeTTeleporter teleporter = plugin.getSafeTTeleporter();
+                    newValue = teleporter.getSafeLocation(newValue, SPAWN_LOCATION_SEARCH_TOLERANCE, SPAWN_LOCATION_SEARCH_RADIUS);
+                    if (newValue == null) {
+                        plugin.log(Level.WARNING, "Couldn't fix the location. I have to abort the spawn location-change :/");
+                        throw new ChangeDeniedException();
+                    }
+                    plugin.log(Level.WARNING, "New (safe) Location: " + plugin.getLocationManipulation().strCoordsRaw(newValue));
+                }
+            }
+            return super.validateChange(property, newValue, oldValue, object);
+        }
     }
 }

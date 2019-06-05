@@ -23,13 +23,14 @@ public class MVMapListener implements Listener {
 
     /**
      * This method is called when a map is initialized.
+     *
      * @param event The event that was fired.
      */
     @EventHandler
     public void mapInitialize(final MapInitializeEvent event) {
         for (final Player player : Bukkit.getOnlinePlayers()) {
             if ((player.getItemInHand().getType() == Material.MAP
-                    || player.getItemInHand().getType() == Material.FILLED_MAP)
+                    || player.getItemInHand().getType() == Material.MAP)
                     && player.getItemInHand().getDurability() == event.getMap().getId()) {
                 final Location playerLoc = player.getLocation();
                 final MapView map = event.getMap();

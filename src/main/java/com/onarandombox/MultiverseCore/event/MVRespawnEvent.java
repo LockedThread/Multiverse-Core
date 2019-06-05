@@ -16,10 +16,10 @@ import org.bukkit.event.HandlerList;
  * Called when a player is respawning.
  */
 public class MVRespawnEvent extends Event {
-    private Player player;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private final Player player;
+    private final String respawnMethod;
     private Location location;
-    private String respawnMethod;
-
 
     public MVRespawnEvent(Location spawningAt, Player p, String respawnMethod) {
         this.player = p;
@@ -27,7 +27,14 @@ public class MVRespawnEvent extends Event {
         this.respawnMethod = respawnMethod;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of HANDLERS.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
@@ -38,15 +45,8 @@ public class MVRespawnEvent extends Event {
     }
 
     /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of HANDLERS.
-     */
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
-    /**
      * Gets the {@link Player} that's respawning.
+     *
      * @return The {@link Player} that's respawning.
      */
     public Player getPlayer() {
@@ -55,6 +55,7 @@ public class MVRespawnEvent extends Event {
 
     /**
      * Gets the respawn-method.
+     *
      * @return The respawn-method.
      */
     public String getRespawnMethod() {
@@ -63,6 +64,7 @@ public class MVRespawnEvent extends Event {
 
     /**
      * Gets the player's respawn-{@link Location}.
+     *
      * @return The player's respawn-{@link Location}.
      */
     public Location getPlayersRespawnLocation() {
@@ -71,6 +73,7 @@ public class MVRespawnEvent extends Event {
 
     /**
      * Sets the player's respawn-{@link Location}.
+     *
      * @param l The new respawn-{@link Location}.
      */
     public void setRespawnLocation(Location l) {

@@ -8,162 +8,180 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 public interface MultiverseCoreConfig extends ConfigurationSerializable {
     /**
      * Sets a property using a {@link String}.
+     *
      * @param property The name of the property.
-     * @param value The value.
+     * @param value    The value.
      * @return True on success, false if the operation failed.
      */
     boolean setConfigProperty(String property, String value);
 
     /**
-     * Sets portalCooldown.
-     * @param portalCooldown The new value.
-     */
-    void setTeleportCooldown(int portalCooldown);
-
-    /**
      * Gets portalCooldown.
+     *
      * @return portalCooldown.
      */
     int getTeleportCooldown();
 
     /**
-     * Sets firstSpawnWorld.
-     * @param firstSpawnWorld The new value.
+     * Sets portalCooldown.
+     *
+     * @param portalCooldown The new value.
      */
-    void setFirstSpawnWorld(String firstSpawnWorld);
+    void setTeleportCooldown(int portalCooldown);
 
     /**
      * Gets firstSpawnWorld.
+     *
      * @return firstSpawnWorld.
      */
     String getFirstSpawnWorld();
 
     /**
-     * Sets version.
-     * @param version The new value.
+     * Sets firstSpawnWorld.
+     *
+     * @param firstSpawnWorld The new value.
      */
-    void setVersion(int version);
+    void setFirstSpawnWorld(String firstSpawnWorld);
 
     /**
      * Gets version.
+     *
      * @return version.
      */
     double getVersion();
 
     /**
-     * Sets messageCooldown.
-     * @param messageCooldown The new value.
+     * Sets version.
+     *
+     * @param version The new value.
      */
-    void setMessageCooldown(int messageCooldown);
+    void setVersion(int version);
 
     /**
      * Gets messageCooldown.
+     *
      * @return messageCooldown.
      */
     int getMessageCooldown();
 
     /**
-     * Sets globalDebug.
-     * @param globalDebug The new value.
+     * Sets messageCooldown.
+     *
+     * @param messageCooldown The new value.
      */
-    void setGlobalDebug(int globalDebug);
+    void setMessageCooldown(int messageCooldown);
 
     /**
      * Gets globalDebug.
+     *
      * @return globalDebug.
      */
     int getGlobalDebug();
 
     /**
-     * Sets displayPermErrors.
-     * @param displayPermErrors The new value.
+     * Sets globalDebug.
+     *
+     * @param globalDebug The new value.
      */
-    void setDisplayPermErrors(boolean displayPermErrors);
+    void setGlobalDebug(int globalDebug);
 
     /**
      * Gets displayPermErrors.
+     *
      * @return displayPermErrors.
      */
     boolean getDisplayPermErrors();
 
     /**
-     * Sets firstSpawnOverride.
-     * @param firstSpawnOverride The new value.
+     * Sets displayPermErrors.
+     *
+     * @param displayPermErrors The new value.
      */
-    void setFirstSpawnOverride(boolean firstSpawnOverride);
+    void setDisplayPermErrors(boolean displayPermErrors);
 
     /**
      * Gets firstSpawnOverride.
+     *
      * @return firstSpawnOverride.
      */
     boolean getFirstSpawnOverride();
 
     /**
-     * Sets teleportIntercept.
-     * @param teleportIntercept The new value.
+     * Sets firstSpawnOverride.
+     *
+     * @param firstSpawnOverride The new value.
      */
-    void setTeleportIntercept(boolean teleportIntercept);
+    void setFirstSpawnOverride(boolean firstSpawnOverride);
 
     /**
      * Gets teleportIntercept.
+     *
      * @return teleportIntercept.
      */
     boolean getTeleportIntercept();
 
     /**
+     * Sets teleportIntercept.
+     *
+     * @param teleportIntercept The new value.
+     */
+    void setTeleportIntercept(boolean teleportIntercept);
+
+    /**
+     * Gets prefixChat.
+     *
+     * @return prefixChat.
+     */
+    boolean getPrefixChat();
+
+    /**
      * Sets prefixChat.
+     *
      * @param prefixChat The new value.
      */
     void setPrefixChat(boolean prefixChat);
 
     /**
-     * Gets prefixChat.
-     * @return prefixChat.
-     */
-    boolean getPrefixChat();
-    
-    /**
-     * Sets prefixChatFormat.
-     * @param prefixChatFormat The new value.
-     */
-    void setPrefixChatFormat(String prefixChatFormat);
-
-    /**
      * Gets prefixChatFormat.
+     *
      * @return prefixChatFormat.
      */
     String getPrefixChatFormat();
 
     /**
-     * Sets enforceAccess.
-     * @param enforceAccess The new value.
+     * Sets prefixChatFormat.
+     *
+     * @param prefixChatFormat The new value.
      */
-    void setEnforceAccess(boolean enforceAccess);
+    void setPrefixChatFormat(String prefixChatFormat);
 
     /**
      * Gets enforceAccess.
+     *
      * @return enforceAccess.
      */
     boolean getEnforceAccess();
 
     /**
-     * Sets useasyncchat.
-     * @param useAsyncChat The new value.
+     * Sets enforceAccess.
+     *
+     * @param enforceAccess The new value.
      */
-    void setUseAsyncChat(boolean useAsyncChat);
+    void setEnforceAccess(boolean enforceAccess);
 
     /**
      * Gets useasyncchat.
+     *
      * @return useasyncchat.
      */
     boolean getUseAsyncChat();
 
     /**
-     * Sets whether to suppress startup messages.
+     * Sets useasyncchat.
      *
-     * @param silentStart true to suppress messages.
+     * @param useAsyncChat The new value.
      */
-    void setSilentStart(boolean silentStart);
+    void setUseAsyncChat(boolean useAsyncChat);
 
     /**
      * Whether we are suppressing startup messages.
@@ -171,6 +189,13 @@ public interface MultiverseCoreConfig extends ConfigurationSerializable {
      * @return true if we are suppressing startup messages.
      */
     boolean getSilentStart();
+
+    /**
+     * Sets whether to suppress startup messages.
+     *
+     * @param silentStart true to suppress messages.
+     */
+    void setSilentStart(boolean silentStart);
 
     /**
      * Sets whether or not to let Bukkit determine portal search radius on its own or if Multiverse should give input.
@@ -187,18 +212,18 @@ public interface MultiverseCoreConfig extends ConfigurationSerializable {
     boolean isUsingDefaultPortalSearch();
 
     /**
-     * Sets the radius at which vanilla style portals will be searched for to connect to worlds together.
-     *
-     * @param searchRadius The portal search radius.
-     */
-    void setPortalSearchRadius(int searchRadius);
-
-    /**
      * Gets the radius at which vanilla style portals will be searched for to connect to worlds together.
      *
      * @return The portal search radius.
      */
     int getPortalSearchRadius();
+
+    /**
+     * Sets the radius at which vanilla style portals will be searched for to connect to worlds together.
+     *
+     * @param searchRadius The portal search radius.
+     */
+    void setPortalSearchRadius(int searchRadius);
 
     /**
      * Gets whether or not the automatic purge of entities is enabled.

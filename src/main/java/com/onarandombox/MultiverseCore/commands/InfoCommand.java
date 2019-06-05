@@ -30,7 +30,7 @@ import java.util.List;
  * Returns detailed information about a world.
  */
 public class InfoCommand extends MultiverseCommand {
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public InfoCommand(MultiverseCore plugin) {
         super(plugin);
@@ -44,6 +44,68 @@ public class InfoCommand extends MultiverseCommand {
         this.addCommandExample("/mv info " + ChatColor.GOLD + "3");
         this.setPermission("multiverse.core.info", "Returns detailed information on the world.", PermissionDefault.OP);
         this.worldManager = this.plugin.getMVWorldManager();
+    }
+
+    private static String toCommaSeperated(List<String> list) {
+        if (list == null || list.size() == 0) {
+            return "";
+        }
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        StringBuilder result = new StringBuilder(list.get(0));
+
+        for (int i = 1; i < list.size() - 1; i++) {
+            result.append(", ").append(list.get(i));
+        }
+        result.append(" and ").append(list.get(list.size() - 1));
+        return result.toString();
+    }
+
+    private static void showPage(int page, CommandSender sender, List<List<FancyText>> doc) {
+        page = page < 0 ? 0 : page;
+        page = page > doc.size() - 1 ? doc.size() - 1 : page;
+        boolean altColor = false;
+        boolean appendedPageNum = false;
+        if (sender instanceof Player) {
+            List<FancyText> list = doc.get(page);
+            for (FancyText fancyT : list) {
+                if (fancyT instanceof FancyMessage) {
+                    FancyMessage text = (FancyMessage) fancyT;
+                    text.setAltColor(altColor);
+                    altColor = !altColor;
+                    sender.sendMessage(text.getFancyText());
+                } else if (fancyT instanceof FancyHeader) {
+                    FancyHeader text = (FancyHeader) fancyT;
+                    if (!appendedPageNum) {
+                        text.appendText(ChatColor.DARK_PURPLE + " [ Page " + (page + 1) + " of " + doc.size() + " ]");
+                        appendedPageNum = true;
+                    }
+                    sender.sendMessage(text.getFancyText());
+                    altColor = false;
+                }
+            }
+
+        } else {
+            for (List<FancyText> list : doc) {
+                for (FancyText fancyT : list) {
+                    if (fancyT instanceof FancyMessage) {
+                        FancyMessage text = (FancyMessage) fancyT;
+                        text.setAltColor(altColor);
+                        altColor = !altColor;
+                        sender.sendMessage(text.getFancyText());
+                    } else {
+                        if (appendedPageNum) {
+                            sender.sendMessage(" ");
+                        } else {
+                            appendedPageNum = true;
+                        }
+                        sender.sendMessage(fancyT.getFancyText());
+                        altColor = false;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -109,8 +171,8 @@ public class InfoCommand extends MultiverseCommand {
     }
 
     private List<List<FancyText>> buildEntireCommand(MultiverseWorld world, Player p) {
-        List<FancyText> message = new ArrayList<FancyText>();
-        List<List<FancyText>> worldInfo = new ArrayList<List<FancyText>>();
+        List<FancyText> message = new ArrayList<>();
+        List<List<FancyText>> worldInfo = new ArrayList<>();
         // Page 1
         FancyColorScheme colors = new FancyColorScheme(ChatColor.AQUA, ChatColor.AQUA, ChatColor.GOLD, ChatColor.WHITE);
         message.add(new FancyHeader("General Info", colors));
@@ -148,7 +210,7 @@ public class InfoCommand extends MultiverseCommand {
 
         worldInfo.add(message);
         // Page 2
-        message = new ArrayList<FancyText>();
+        message = new ArrayList<>();
         message.add(new FancyHeader("More World Settings", colors));
         message.add(new FancyMessage("World Type: ", world.getWorldType().toString(), colors));
         message.add(new FancyMessage("Structures: ", world.getCBWorld().canGenerateStructures() + "", colors));
@@ -160,7 +222,7 @@ public class InfoCommand extends MultiverseCommand {
         message.add(new FancyMessage("Bukkit Setting: ", world.getCBWorld().getPVP() + "", colors));
         worldInfo.add(message);
         // Page 3
-        message = new ArrayList<FancyText>();
+        message = new ArrayList<>();
         message.add(new FancyHeader("Monster Settings", colors));
         message.add(new FancyMessage("Multiverse Setting: ", world.canMonstersSpawn() + "", colors));
         message.add(new FancyMessage("Bukkit Setting: ", world.getCBWorld().getAllowMonsters() + "", colors));
@@ -177,7 +239,7 @@ public class InfoCommand extends MultiverseCommand {
         worldInfo.add(message);
 
         // Page 4
-        message = new ArrayList<FancyText>();
+        message = new ArrayList<>();
         message.add(new FancyHeader("Animal Settings", colors));
         message.add(new FancyMessage("Multiverse Setting: ", world.canAnimalsSpawn() + "", colors));
         message.add(new FancyMessage("Bukkit Setting: ", world.getCBWorld().getAllowAnimals() + "", colors));
@@ -196,22 +258,6 @@ public class InfoCommand extends MultiverseCommand {
         return worldInfo;
     }
 
-    private static String toCommaSeperated(List<String> list) {
-        if (list == null || list.size() == 0) {
-            return "";
-        }
-        if (list.size() == 1) {
-            return list.get(0);
-        }
-        String result = list.get(0);
-
-        for (int i = 1; i < list.size() - 1; i++) {
-            result += ", " + list.get(i);
-        }
-        result += " and " + list.get(list.size() - 1);
-        return result;
-    }
-
     /**
      * Gets a "positive" or "negative" {@link ChatColor}.
      *
@@ -220,53 +266,6 @@ public class InfoCommand extends MultiverseCommand {
      */
     protected ChatColor getChatColor(boolean positive) {
         return positive ? ChatColor.GREEN : ChatColor.RED;
-    }
-
-    private static void showPage(int page, CommandSender sender, List<List<FancyText>> doc) {
-        page = page < 0 ? 0 : page;
-        page = page > doc.size() - 1 ? doc.size() - 1 : page;
-        boolean altColor = false;
-        boolean appendedPageNum = false;
-        if (sender instanceof Player) {
-            List<FancyText> list = doc.get(page);
-            for (FancyText fancyT : list) {
-                if (fancyT instanceof FancyMessage) {
-                    FancyMessage text = (FancyMessage) fancyT;
-                    text.setAltColor(altColor);
-                    altColor = !altColor;
-                    sender.sendMessage(text.getFancyText());
-                } else if (fancyT instanceof FancyHeader) {
-                    FancyHeader text = (FancyHeader) fancyT;
-                    if (!appendedPageNum) {
-                        text.appendText(ChatColor.DARK_PURPLE + " [ Page " + (page + 1) + " of " + doc.size() + " ]");
-                        appendedPageNum = true;
-                    }
-                    sender.sendMessage(text.getFancyText());
-                    altColor = false;
-                }
-            }
-
-        } else {
-            for (List<FancyText> list : doc) {
-                for (FancyText fancyT : list) {
-                    if (fancyT instanceof FancyMessage) {
-                        FancyMessage text = (FancyMessage) fancyT;
-                        text.setAltColor(altColor);
-                        altColor = !altColor;
-                        sender.sendMessage(text.getFancyText());
-                    } else {
-                        FancyText text = fancyT;
-                        if (appendedPageNum) {
-                            sender.sendMessage(" ");
-                        } else {
-                            appendedPageNum = true;
-                        }
-                        sender.sendMessage(text.getFancyText());
-                        altColor = false;
-                    }
-                }
-            }
-        }
     }
 
 }

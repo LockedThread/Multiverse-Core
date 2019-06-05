@@ -27,13 +27,45 @@ import java.util.logging.Level;
  */
 public class MVPermissions implements PermissionsInterface {
 
-    private MultiverseCore plugin;
-    private MVWorldManager worldMgr;
+    private final MultiverseCore plugin;
+    private final MVWorldManager worldMgr;
 
     public MVPermissions(MultiverseCore plugin) {
         this.plugin = plugin;
         this.worldMgr = plugin.getMVWorldManager();
 
+    }
+
+    /**
+     * Pulls one level off of a yaml style node.
+     * Given multiverse.core.list.worlds will return multiverse.core.list
+     *
+     * @param node The root node to check.
+     * @return The parent of the node
+     */
+    private static String pullOneLevelOff(String node) {
+        if (node == null) {
+            return null;
+        }
+        int index = node.lastIndexOf(".");
+        if (index > 0) {
+            return node.substring(0, index);
+        }
+        return null;
+    }
+
+    /**
+     * If the given permission was 'multiverse.core.tp.self', this would return 'multiverse.core.tp.*'.
+     */
+    private static String getParentPerm(String[] seperated) {
+        if (seperated.length == 1) {
+            return null;
+        }
+        StringBuilder returnString = new StringBuilder();
+        for (int i = 0; i < seperated.length - 1; i++) {
+            returnString.append(seperated[i]).append(".");
+        }
+        return returnString + "*";
     }
 
     /**
@@ -71,7 +103,8 @@ public class MVPermissions implements PermissionsInterface {
 
     /**
      * Checks if the specified {@link CommandSender} can travel to the specified {@link Location}.
-     * @param sender The {@link CommandSender}.
+     *
+     * @param sender   The {@link CommandSender}.
      * @param location The {@link Location}.
      * @return Whether the {@link CommandSender} can travel to the specified {@link Location}.
      */
@@ -146,9 +179,10 @@ public class MVPermissions implements PermissionsInterface {
 
     /**
      * Tells a {@link CommandSender} why another {@link CommandSender} can or can not access a certain {@link MVDestination}.
-     * @param asker The {@link CommandSender} that's asking.
+     *
+     * @param asker            The {@link CommandSender} that's asking.
      * @param playerInQuestion The {@link CommandSender} whose permissions we want to know.
-     * @param d The {@link MVDestination}.
+     * @param d                The {@link MVDestination}.
      */
     public void tellMeWhyICantDoThis(CommandSender asker, CommandSender playerInQuestion, MVDestination d) {
         boolean cango = true;
@@ -280,7 +314,7 @@ public class MVPermissions implements PermissionsInterface {
      */
     // TODO remove this...?
     private boolean hasAnyParentPermission(CommandSender sender, String node) {
-        String parentPerm = this.pullOneLevelOff(node);
+        String parentPerm = pullOneLevelOff(node);
         // Base case
         if (parentPerm == null) {
             return false;
@@ -293,25 +327,8 @@ public class MVPermissions implements PermissionsInterface {
     }
 
     /**
-     * Pulls one level off of a yaml style node.
-     * Given multiverse.core.list.worlds will return multiverse.core.list
-     *
-     * @param node The root node to check.
-     * @return The parent of the node
-     */
-    private static String pullOneLevelOff(String node) {
-        if (node == null) {
-            return null;
-        }
-        int index = node.lastIndexOf(".");
-        if (index > 0) {
-            return node.substring(0, index);
-        }
-        return null;
-    }
-
-    /**
      * Gets the type of this {@link PermissionsInterface}.
+     *
      * @return The type of this {@link PermissionsInterface}.
      */
     public String getType() {
@@ -346,7 +363,8 @@ public class MVPermissions implements PermissionsInterface {
 
     /**
      * Adds a permission.
-     * @param string The permission as {@link String}.
+     *
+     * @param string       The permission as {@link String}.
      * @param defaultValue The default-value.
      * @return The permission as {@link Permission}.
      */
@@ -399,19 +417,5 @@ public class MVPermissions implements PermissionsInterface {
         }
         rootPermission.getChildren().put(permStringChopped + ".*", true);
         this.plugin.getServer().getPluginManager().recalculatePermissionDefaults(rootPermission);
-    }
-
-    /**
-     * If the given permission was 'multiverse.core.tp.self', this would return 'multiverse.core.tp.*'.
-     */
-    private static String getParentPerm(String[] seperated) {
-        if (seperated.length == 1) {
-            return null;
-        }
-        String returnString = "";
-        for (int i = 0; i < seperated.length - 1; i++) {
-            returnString += seperated[i] + ".";
-        }
-        return returnString + "*";
     }
 }

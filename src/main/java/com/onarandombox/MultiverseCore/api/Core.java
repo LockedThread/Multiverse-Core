@@ -9,14 +9,7 @@ package com.onarandombox.MultiverseCore.api;
 
 import buscript.Buscript;
 import com.onarandombox.MultiverseCore.destination.DestinationFactory;
-import com.onarandombox.MultiverseCore.utils.AnchorManager;
-import com.onarandombox.MultiverseCore.utils.MVEconomist;
-import com.onarandombox.MultiverseCore.utils.MVPermissions;
-import com.onarandombox.MultiverseCore.utils.MVPlayerSession;
-import com.onarandombox.MultiverseCore.utils.SimpleBlockSafety;
-import com.onarandombox.MultiverseCore.utils.SimpleLocationManipulation;
-import com.onarandombox.MultiverseCore.utils.SimpleSafeTTeleporter;
-import com.onarandombox.MultiverseCore.utils.VaultHandler;
+import com.onarandombox.MultiverseCore.utils.*;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import org.bukkit.entity.Player;
 
@@ -65,7 +58,6 @@ public interface Core {
      * for a player.
      *
      * @param player The player's session to grab.
-     *
      * @return The corresponding {@link MVPlayerSession}.
      */
     MVPlayerSession getPlayerSession(Player player);
@@ -118,13 +110,11 @@ public interface Core {
     /**
      * Used by queued commands to regenerate a world on a delay.
      *
-     * @param name Name of the world to regenerate
+     * @param name       Name of the world to regenerate
      * @param useNewSeed If a new seed should be used
      * @param randomSeed IF the new seed should be random
-     * @param seed The seed of the world.
-     *
+     * @param seed       The seed of the world.
      * @return True if success, false if fail.
-     *
      * @deprecated Use {@link MVWorldManager#regenWorld(String, boolean, boolean, String)} instead.
      */
     @Deprecated
@@ -156,6 +146,7 @@ public interface Core {
 
     /**
      * Gets the {@link BlockSafety} this {@link Core} is using.
+     *
      * @return The {@link BlockSafety} this {@link Core} is using.
      * @see BlockSafety
      * @see SimpleBlockSafety
@@ -164,6 +155,7 @@ public interface Core {
 
     /**
      * Sets the {@link BlockSafety} this {@link Core} is using.
+     *
      * @param blockSafety The new {@link BlockSafety}.
      * @see BlockSafety
      * @see SimpleBlockSafety
@@ -172,6 +164,7 @@ public interface Core {
 
     /**
      * Gets the {@link LocationManipulation} this {@link Core} is using.
+     *
      * @return The {@link LocationManipulation} this {@link Core} is using.
      * @see LocationManipulation
      * @see SimpleLocationManipulation
@@ -180,6 +173,7 @@ public interface Core {
 
     /**
      * Sets the {@link LocationManipulation} this {@link Core} is using.
+     *
      * @param locationManipulation The new {@link LocationManipulation}.
      * @see LocationManipulation
      * @see SimpleLocationManipulation
@@ -188,6 +182,7 @@ public interface Core {
 
     /**
      * Gets the {@link SafeTTeleporter} this {@link Core} is using.
+     *
      * @return The {@link SafeTTeleporter} this {@link Core} is using.
      * @see SafeTTeleporter
      * @see SimpleSafeTTeleporter
@@ -196,6 +191,7 @@ public interface Core {
 
     /**
      * Sets the {@link SafeTTeleporter} this {@link Core} is using.
+     *
      * @param safeTTeleporter The new {@link SafeTTeleporter}.
      * @see SafeTTeleporter
      * @see SimpleSafeTTeleporter
@@ -204,6 +200,7 @@ public interface Core {
 
     /**
      * Gets the {@link MultiverseCoreConfig}.
+     *
      * @return The configuration.
      */
     MultiverseCoreConfig getMVConfig();

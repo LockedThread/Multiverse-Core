@@ -13,10 +13,10 @@ import org.bukkit.ChatColor;
  * A color-scheme.
  */
 public class FancyColorScheme {
-    private ChatColor headerColor;
-    private ChatColor mainColor;
-    private ChatColor altColor;
-    private ChatColor defContentColor;
+    private final ChatColor headerColor;
+    private final ChatColor mainColor;
+    private final ChatColor altColor;
+    private final ChatColor defContentColor;
 
     public FancyColorScheme(ChatColor header, ChatColor main, ChatColor alt, ChatColor defaultColor) {
         this.headerColor = header;
@@ -27,6 +27,7 @@ public class FancyColorScheme {
 
     /**
      * Gets the header's {@link ChatColor}.
+     *
      * @return The header's {@link ChatColor}.
      */
     public ChatColor getHeader() {
@@ -35,6 +36,7 @@ public class FancyColorScheme {
 
     /**
      * Gets the main {@link ChatColor}.
+     *
      * @return The main {@link ChatColor}.
      */
     public ChatColor getMain() {
@@ -43,6 +45,7 @@ public class FancyColorScheme {
 
     /**
      * Gets the alt {@link ChatColor}.
+     *
      * @return The alt {@link ChatColor}.
      */
     public ChatColor getAlt() {
@@ -51,6 +54,7 @@ public class FancyColorScheme {
 
     /**
      * Gets the default {@link ChatColor}.
+     *
      * @return The default {@link ChatColor}.
      */
     public ChatColor getDefault() {
@@ -59,6 +63,7 @@ public class FancyColorScheme {
 
     /**
      * Gets either the main or the alt {@link ChatColor}.
+     *
      * @param main True if the main-color is desired, false to get the alt color.
      * @return The desired {@link ChatColor}.
      */

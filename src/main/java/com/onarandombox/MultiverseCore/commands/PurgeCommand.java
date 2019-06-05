@@ -24,7 +24,7 @@ import java.util.List;
  * Removes a type of mob from a world.
  */
 public class PurgeCommand extends MultiverseCommand {
-    private MVWorldManager worldManager;
+    private final MVWorldManager worldManager;
 
     public PurgeCommand(MultiverseCore plugin) {
         super(plugin);
@@ -54,8 +54,8 @@ public class PurgeCommand extends MultiverseCommand {
             sender.sendMessage(this.getCommandUsage());
             return;
         }
-        String worldName = null;
-        String deathName = null;
+        String worldName;
+        String deathName;
         if (args.size() == 1) {
             worldName = p.getWorld().getName();
             deathName = args.get(0);
@@ -70,7 +70,7 @@ public class PurgeCommand extends MultiverseCommand {
             return;
         }
 
-        List<MultiverseWorld> worldsToRemoveEntitiesFrom = new ArrayList<MultiverseWorld>();
+        List<MultiverseWorld> worldsToRemoveEntitiesFrom = new ArrayList<>();
         // Handle all case any user who names a world "all" should know better...
         if (worldName.equalsIgnoreCase("all")) {
             worldsToRemoveEntitiesFrom.addAll(this.worldManager.getMVWorlds());
@@ -79,7 +79,7 @@ public class PurgeCommand extends MultiverseCommand {
         }
 
         WorldPurger purger = this.worldManager.getTheWorldPurger();
-        ArrayList<String> thingsToKill = new ArrayList<String>();
+        ArrayList<String> thingsToKill = new ArrayList<>();
         if (deathName.equalsIgnoreCase("all") || deathName.equalsIgnoreCase("animals") || deathName.equalsIgnoreCase("monsters")) {
             thingsToKill.add(deathName.toUpperCase());
         } else {

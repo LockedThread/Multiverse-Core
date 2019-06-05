@@ -83,7 +83,7 @@ public interface LocationManipulation {
     /**
      * Returns a translated vector from the given direction.
      *
-     * @param v The old {@link Vector}
+     * @param v         The old {@link Vector}
      * @param direction The new direction
      * @return The translated {@link Vector}
      */

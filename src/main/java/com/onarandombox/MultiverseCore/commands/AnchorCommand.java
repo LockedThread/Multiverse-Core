@@ -44,7 +44,7 @@ public class AnchorCommand extends PaginatedCoreCommand<String> {
     }
 
     private List<String> getFancyAnchorList(Player p) {
-        List<String> anchorList = new ArrayList<String>();
+        List<String> anchorList = new ArrayList<>();
         ChatColor color = ChatColor.GREEN;
         for (String anchor : this.plugin.getAnchorManager().getAnchors(p)) {
             anchorList.add(color + anchor);
@@ -68,7 +68,7 @@ public class AnchorCommand extends PaginatedCoreCommand<String> {
 
         FilterObject filterObject = this.getPageAndFilter(args);
 
-        List<String> availableAnchors = new ArrayList<String>(this.getFancyAnchorList(p));
+        List<String> availableAnchors = new ArrayList<>(this.getFancyAnchorList(p));
         if (filterObject.getFilter().length() > 0) {
             availableAnchors = this.getFilteredItems(availableAnchors, filterObject.getFilter());
             if (availableAnchors.size() == 0) {
@@ -146,7 +146,7 @@ public class AnchorCommand extends PaginatedCoreCommand<String> {
 
     @Override
     protected List<String> getFilteredItems(List<String> availableItems, String filter) {
-        List<String> filtered = new ArrayList<String>();
+        List<String> filtered = new ArrayList<>();
         for (String s : availableItems) {
             if (s.matches("(?i).*" + filter + ".*")) {
                 filtered.add(s);

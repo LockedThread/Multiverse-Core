@@ -21,13 +21,15 @@ import org.bukkit.event.HandlerList;
  * If you want to get the values of the world before the change, query the world.
  * To get the name of the property that was changed, use {@link #getPropertyName()}.
  * To get the new value, use {@link #getTheNewValue()}. To change it, use {@link #setTheNewValue(Object)}.
+ *
  * @param <T> The type of the property that was set.
  */
 public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable {
-    private MultiverseWorld world;
-    private CommandSender changer;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private final MultiverseWorld world;
+    private final CommandSender changer;
+    private final String name;
     private boolean isCancelled = false;
-    private String name;
     private T value;
 
     public MVWorldPropertyChangeEvent(MultiverseWorld world, CommandSender changer, String name, T value) {
@@ -37,7 +39,14 @@ public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable 
         this.value = value;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of handlers.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
@@ -48,15 +57,8 @@ public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable 
     }
 
     /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of handlers.
-     */
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
-    /**
      * Gets the changed world property's name.
+     *
      * @return The changed world property's name.
      */
     public String getPropertyName() {
@@ -65,6 +67,7 @@ public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable 
 
     /**
      * Gets the new value.
+     *
      * @return The new value.
      * @deprecated Use {@link #getTheNewValue()} instead.
      */
@@ -74,17 +77,10 @@ public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable 
     }
 
     /**
-     * Gets the new value.
-     * @return The new value.
-     */
-    public T getTheNewValue() {
-        return this.value;
-    }
-
-    /**
      * Sets the new value.
      * <p>
      * This method is only a stub, it'll <b>always</b> throw an {@link UnsupportedOperationException}!
+     *
      * @param value The new new value.
      * @deprecated Use {@link #setTheNewValue(Object)} instead.
      */
@@ -94,7 +90,17 @@ public class MVWorldPropertyChangeEvent<T> extends Event implements Cancellable 
     }
 
     /**
+     * Gets the new value.
+     *
+     * @return The new value.
+     */
+    public T getTheNewValue() {
+        return this.value;
+    }
+
+    /**
      * Sets the new value.
+     *
      * @param value The new value.
      */
     public void setTheNewValue(T value) {

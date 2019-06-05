@@ -21,6 +21,9 @@ import java.util.List;
  * A cannon-{@link MVDestination}.
  */
 public class CannonDestination implements MVDestination {
+    // NEED ca:world:x,y,z:pitch:yaw:speed
+    // so basically 6
+    private static final int SPLIT_SIZE = 6;
     private final String coordRegex = "(-?[\\d]+\\.?[\\d]*),(-?[\\d]+\\.?[\\d]*),(-?[\\d]+\\.?[\\d]*)";
     private boolean isValid;
     private Location location;
@@ -49,10 +52,6 @@ public class CannonDestination implements MVDestination {
     public String getIdentifier() {
         return "ca";
     }
-
-    // NEED ca:world:x,y,z:pitch:yaw:speed
-    // so basically 6
-    private static final int SPLIT_SIZE = 6;
 
     /**
      * {@inheritDoc}
@@ -189,7 +188,7 @@ public class CannonDestination implements MVDestination {
      * Sets this {@link CannonDestination}.
      *
      * @param location The {@link Location}.
-     * @param speed The speed.
+     * @param speed    The speed.
      */
     public void setDestination(Location location, double speed) {
         if (location != null) {

@@ -48,7 +48,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -82,13 +81,10 @@ public class TestInstanceCreator {
             // Return a fake PDF file.
             PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("Multiverse-Core", "2.2-Test",
                     "com.onarandombox.MultiverseCore.MultiverseCore"));
-            when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
+            when(pdf.getAuthors()).thenReturn(new ArrayList<>());
             core = PowerMockito.spy(new MultiverseCore(mockPluginLoader, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
-            PowerMockito.doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    return null; // don't run metrics in tests
-                }
+            PowerMockito.doAnswer((Answer<Void>) invocation -> {
+                return null; // don't run metrics in tests
             }).when(core, "setupMetrics");
 
             // Let's let all MV files go to bin/test
@@ -121,58 +117,44 @@ public class TestInstanceCreator {
             worldSkylandsFile.mkdirs();
 
             // Give the server some worlds
-            when(mockServer.getWorld(anyString())).thenAnswer(new Answer<World>() {
-                @Override
-                public World answer(InvocationOnMock invocation) throws Throwable {
-                    String arg;
-                    try {
-                        arg = (String) invocation.getArguments()[0];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    return MockWorldFactory.getWorld(arg);
+            when(mockServer.getWorld(anyString())).thenAnswer((Answer<World>) invocation -> {
+                String arg;
+                try {
+                    arg = (String) invocation.getArguments()[0];
+                } catch (Exception e) {
+                    return null;
                 }
+                return MockWorldFactory.getWorld(arg);
             });
 
-            when(mockServer.getWorld(any(UUID.class))).thenAnswer(new Answer<World>() {
-                @Override
-                public World answer(InvocationOnMock invocation) throws Throwable {
-                    UUID arg;
-                    try {
-                        arg = (UUID) invocation.getArguments()[0];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    return MockWorldFactory.getWorld(arg);
+            when(mockServer.getWorld(any(UUID.class))).thenAnswer((Answer<World>) invocation -> {
+                UUID arg;
+                try {
+                    arg = (UUID) invocation.getArguments()[0];
+                } catch (Exception e) {
+                    return null;
                 }
+                return MockWorldFactory.getWorld(arg);
             });
 
-            when(mockServer.getWorlds()).thenAnswer(new Answer<List<World>>() {
-                @Override
-                public List<World> answer(InvocationOnMock invocation) throws Throwable {
-                    return MockWorldFactory.getWorlds();
-                }
-            });
+            when(mockServer.getWorlds()).thenAnswer((Answer<List<World>>) invocation -> MockWorldFactory.getWorlds());
 
             when(mockServer.getPluginManager()).thenReturn(mockPluginManager);
 
             when(mockServer.createWorld(ArgumentMatchers.isA(WorldCreator.class))).thenAnswer(
-                    new Answer<World>() {
-                        @Override
-                        public World answer(InvocationOnMock invocation) throws Throwable {
-                            WorldCreator arg;
-                            try {
-                                arg = (WorldCreator) invocation.getArguments()[0];
-                            } catch (Exception e) {
-                                return null;
-                            }
-                            // Add special case for creating null worlds.
-                            // Not sure I like doing it this way, but this is a special case
-                            if (arg.name().equalsIgnoreCase("nullworld")) {
-                                return MockWorldFactory.makeNewNullMockWorld(arg.name(), arg.environment(), arg.type());
-                            }
-                            return MockWorldFactory.makeNewMockWorld(arg.name(), arg.environment(), arg.type());
+                    (Answer<World>) invocation -> {
+                        WorldCreator arg;
+                        try {
+                            arg = (WorldCreator) invocation.getArguments()[0];
+                        } catch (Exception e) {
+                            return null;
                         }
+                        // Add special case for creating null worlds.
+                        // Not sure I like doing it this way, but this is a special case
+                        if (arg.name().equalsIgnoreCase("nullworld")) {
+                            return MockWorldFactory.makeNewNullMockWorld(arg.name(), arg.environment(), arg.type());
+                        }
+                        return MockWorldFactory.makeNewMockWorld(arg.name(), arg.environment(), arg.type());
                     });
 
             when(mockServer.unloadWorld(anyString(), anyBoolean())).thenReturn(true);
@@ -180,31 +162,27 @@ public class TestInstanceCreator {
             // add mock scheduler
             BukkitScheduler mockScheduler = mock(BukkitScheduler.class);
             when(mockScheduler.scheduleSyncDelayedTask(any(Plugin.class), any(Runnable.class), anyLong())).
-            thenAnswer(new Answer<Integer>() {
-                @Override
-                public Integer answer(InvocationOnMock invocation) throws Throwable {
-                    Runnable arg;
-                    try {
-                        arg = (Runnable) invocation.getArguments()[1];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    arg.run();
+            thenAnswer((Answer<Integer>) invocation -> {
+                Runnable arg;
+                try {
+                    arg = (Runnable) invocation.getArguments()[1];
+                } catch (Exception e) {
                     return null;
-                }});
+                }
+                arg.run();
+                return null;
+            });
             when(mockScheduler.scheduleSyncDelayedTask(any(Plugin.class), any(Runnable.class))).
-            thenAnswer(new Answer<Integer>() {
-                @Override
-                public Integer answer(InvocationOnMock invocation) throws Throwable {
-                    Runnable arg;
-                    try {
-                        arg = (Runnable) invocation.getArguments()[1];
-                    } catch (Exception e) {
-                        return null;
-                    }
-                    arg.run();
+            thenAnswer((Answer<Integer>) invocation -> {
+                Runnable arg;
+                try {
+                    arg = (Runnable) invocation.getArguments()[1];
+                } catch (Exception e) {
                     return null;
-                }});
+                }
+                arg.run();
+                return null;
+            });
             when(mockServer.getScheduler()).thenReturn(mockScheduler);
 
             // Set server
@@ -247,12 +225,10 @@ public class TestInstanceCreator {
             final Logger commandSenderLogger = Logger.getLogger("CommandSender");
             commandSenderLogger.setParent(Util.logger);
             commandSender = mock(CommandSender.class);
-            doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    commandSenderLogger.info(ChatColor.stripColor((String) invocation.getArguments()[0]));
-                    return null;
-                }}).when(commandSender).sendMessage(anyString());
+            doAnswer((Answer<Void>) invocation -> {
+                commandSenderLogger.info(ChatColor.stripColor((String) invocation.getArguments()[0]));
+                return null;
+            }).when(commandSender).sendMessage(anyString());
             when(commandSender.getServer()).thenReturn(mockServer);
             when(commandSender.getName()).thenReturn("MockCommandSender");
             when(commandSender.isPermissionSet(anyString())).thenReturn(true);
@@ -279,7 +255,7 @@ public class TestInstanceCreator {
     }
 
     public boolean tearDown() {
-        List<MultiverseWorld> worlds = new ArrayList<MultiverseWorld>(core.getMVWorldManager()
+        List<MultiverseWorld> worlds = new ArrayList<>(core.getMVWorldManager()
                 .getMVWorlds());
         for (MultiverseWorld world : worlds) {
             core.getMVWorldManager().deleteWorld(world.getName());

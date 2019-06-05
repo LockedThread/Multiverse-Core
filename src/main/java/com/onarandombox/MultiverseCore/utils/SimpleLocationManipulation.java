@@ -7,14 +7,13 @@
 
 package com.onarandombox.MultiverseCore.utils;
 
+import com.onarandombox.MultiverseCore.api.LocationManipulation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
-
-import com.onarandombox.MultiverseCore.api.LocationManipulation;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -28,7 +27,7 @@ public class SimpleLocationManipulation implements LocationManipulation {
     private static final Map<String, Integer> ORIENTATION_INTS;
 
     static {
-        Map<String, Integer> orientationInts = new HashMap<String, Integer>();
+        Map<String, Integer> orientationInts = new HashMap<>();
         // BEGIN CHECKSTYLE-SUPPRESSION: MagicNumberCheck
         orientationInts.put("n", 180);
         orientationInts.put("ne", 225);

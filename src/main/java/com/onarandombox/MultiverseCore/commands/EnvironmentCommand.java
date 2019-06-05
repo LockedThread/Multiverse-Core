@@ -46,6 +46,7 @@ public class EnvironmentCommand extends MultiverseCommand {
         sender.sendMessage(ChatColor.RED + "NETHER");
         sender.sendMessage(ChatColor.AQUA + "END");
     }
+
     /**
      * Shows all valid known world types to a {@link CommandSender}.
      *
@@ -55,12 +56,6 @@ public class EnvironmentCommand extends MultiverseCommand {
         sender.sendMessage(ChatColor.YELLOW + "Valid World Types are:");
         sender.sendMessage(String.format("%sNORMAL%s, %sFLAT, %sLARGEBIOMES %sor %sVERSION_1_1",
                 ChatColor.GREEN, ChatColor.WHITE, ChatColor.AQUA, ChatColor.RED, ChatColor.WHITE, ChatColor.GOLD));
-    }
-
-    @Override
-    public void runCommand(CommandSender sender, List<String> args) {
-        EnvironmentCommand.showEnvironments(sender);
-        EnvironmentCommand.showWorldTypes(sender);
     }
 
     /**
@@ -114,5 +109,11 @@ public class EnvironmentCommand extends MultiverseCommand {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    @Override
+    public void runCommand(CommandSender sender, List<String> args) {
+        EnvironmentCommand.showEnvironments(sender);
+        EnvironmentCommand.showWorldTypes(sender);
     }
 }

@@ -32,7 +32,7 @@ public class ModifyCommand extends MultiverseCommand {
         this.addKey("mvm");
         this.addKey("mvmodify");
         this.addKey("mv modify");
-        Map<String, Boolean> children = new HashMap<String, Boolean>();
+        Map<String, Boolean> children = new HashMap<>();
         children.put("multiverse.core.modify.add", true);
         children.put("multiverse.core.modify.modify", true);
         children.put("multiverse.core.modify.clear", true);
@@ -49,7 +49,7 @@ public class ModifyCommand extends MultiverseCommand {
     /**
      * Validates the specified action.
      *
-     * @param action The {@link Action}.
+     * @param action   The {@link Action}.
      * @param property The property.
      * @return Whether this action is valid.
      */

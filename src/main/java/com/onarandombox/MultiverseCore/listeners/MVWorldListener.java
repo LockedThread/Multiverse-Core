@@ -20,8 +20,8 @@ import org.bukkit.event.world.WorldUnloadEvent;
  * Multiverse's World {@link Listener}.
  */
 public class MVWorldListener implements Listener {
-    private MultiverseCore plugin;
-    private MVWorldManager worldManager;
+    private final MultiverseCore plugin;
+    private final MVWorldManager worldManager;
 
     public MVWorldListener(MultiverseCore plugin) {
         this.plugin = plugin;
@@ -30,6 +30,7 @@ public class MVWorldListener implements Listener {
 
     /**
      * This method is called when Bukkit fires off a WorldUnloadEvent.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler
@@ -38,7 +39,7 @@ public class MVWorldListener implements Listener {
             return;
         }
         if (event.getWorld() instanceof World) {
-            World world = (World) event.getWorld();
+            World world = event.getWorld();
             if (world != null) {
                 this.plugin.getMVWorldManager().unloadWorld(world.getName(), false);
             }
@@ -47,6 +48,7 @@ public class MVWorldListener implements Listener {
 
     /**
      * This method is called when Bukkit fires off a WorldLoadEvent.
+     *
      * @param event The Event that was fired.
      */
     @EventHandler

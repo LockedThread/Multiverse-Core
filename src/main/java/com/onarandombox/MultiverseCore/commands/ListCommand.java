@@ -36,7 +36,7 @@ public class ListCommand extends PaginatedCoreCommand<String> {
     }
 
     private List<String> getFancyWorldList(Player p) {
-        List<String> worldList = new ArrayList<String>();
+        List<String> worldList = new ArrayList<>();
         for (MultiverseWorld world : this.plugin.getMVWorldManager().getMVWorlds()) {
 
             if (p != null && (!this.plugin.getMVPerms().canEnterWorld(p, world))) {
@@ -74,7 +74,7 @@ public class ListCommand extends PaginatedCoreCommand<String> {
 
     @Override
     protected List<String> getFilteredItems(List<String> availableItems, String filter) {
-        List<String> filtered = new ArrayList<String>();
+        List<String> filtered = new ArrayList<>();
 
         for (String s : availableItems) {
             if (s.matches("(?i).*" + filter + ".*")) {
@@ -100,7 +100,7 @@ public class ListCommand extends PaginatedCoreCommand<String> {
 
         FilterObject filterObject = this.getPageAndFilter(args);
 
-        List<String> availableWorlds = new ArrayList<String>(this.getFancyWorldList(p));
+        List<String> availableWorlds = new ArrayList<>(this.getFancyWorldList(p));
         if (filterObject.getFilter().length() > 0) {
             availableWorlds = this.getFilteredItems(availableWorlds, filterObject.getFilter());
             if (availableWorlds.size() == 0) {

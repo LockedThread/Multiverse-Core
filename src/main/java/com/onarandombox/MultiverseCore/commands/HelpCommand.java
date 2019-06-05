@@ -40,7 +40,7 @@ public class HelpCommand extends PaginatedCoreCommand<Command> {
 
     @Override
     protected List<Command> getFilteredItems(List<Command> availableItems, String filter) {
-        List<Command> filtered = new ArrayList<Command>();
+        List<Command> filtered = new ArrayList<>();
 
         for (Command c : availableItems) {
             if (stitchThisString(c.getKeyStrings()).matches("(?i).*" + filter + ".*")) {
@@ -74,7 +74,7 @@ public class HelpCommand extends PaginatedCoreCommand<Command> {
 
         FilterObject filterObject = this.getPageAndFilter(args);
 
-        List<Command> availableCommands = new ArrayList<Command>(this.plugin.getCommandHandler().getCommands(sender));
+        List<Command> availableCommands = new ArrayList<>(this.plugin.getCommandHandler().getCommands(sender));
         if (filterObject.getFilter().length() > 0) {
             availableCommands = this.getFilteredItems(availableCommands, filterObject.getFilter());
             if (availableCommands.size() == 0) {

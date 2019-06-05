@@ -21,14 +21,32 @@ import java.util.logging.Level;
  * Utility-class for permissions.
  */
 public class PermissionTools {
-    private MultiverseCore plugin;
+    private final MultiverseCore plugin;
 
     public PermissionTools(MultiverseCore plugin) {
         this.plugin = plugin;
     }
 
     /**
+     * If the given permission was 'multiverse.core.tp.self', this would return 'multiverse.core.tp.*'.
+     *
+     * @param separatedPermissionString The array of a dot separated perm string.
+     * @return The dot separated parent permission string.
+     */
+    private static String getParentPerm(String[] separatedPermissionString) {
+        if (separatedPermissionString.length == 1) {
+            return null;
+        }
+        StringBuilder returnString = new StringBuilder();
+        for (int i = 0; i < separatedPermissionString.length - 1; i++) {
+            returnString.append(separatedPermissionString[i]).append(".");
+        }
+        return returnString + "*";
+    }
+
+    /**
      * Adds a permission to the parent-permissions.
+     *
      * @param permString The new permission as {@link String}.
      */
     public void addToParentPerms(String permString) {
@@ -74,29 +92,13 @@ public class PermissionTools {
     }
 
     /**
-     * If the given permission was 'multiverse.core.tp.self', this would return 'multiverse.core.tp.*'.
-     *
-     * @param separatedPermissionString The array of a dot separated perm string.
-     * @return The dot separated parent permission string.
-     */
-    private static String getParentPerm(String[] separatedPermissionString) {
-        if (separatedPermissionString.length == 1) {
-            return null;
-        }
-        String returnString = "";
-        for (int i = 0; i < separatedPermissionString.length - 1; i++) {
-            returnString += separatedPermissionString[i] + ".";
-        }
-        return returnString + "*";
-    }
-
-    /**
      * Checks if the given {@link Player} has enough money to enter the specified {@link MultiverseWorld}.
-     * @param fromWorld The {@link MultiverseWorld} the player is coming from.
-     * @param toWorld The {@link MultiverseWorld} the player is going to.
+     *
+     * @param fromWorld  The {@link MultiverseWorld} the player is coming from.
+     * @param toWorld    The {@link MultiverseWorld} the player is going to.
      * @param teleporter The teleporter.
      * @param teleportee The teleportee.
-     * @param pay If the player has to pay the money.
+     * @param pay        If the player has to pay the money.
      * @return True if the player can enter the world.
      */
     public boolean playerHasMoneyToEnter(MultiverseWorld fromWorld, MultiverseWorld toWorld, CommandSender teleporter, Player teleportee, boolean pay) {
@@ -172,7 +174,7 @@ public class PermissionTools {
         return true;
     }
 
-    private void sendTeleportPaymentMessage (MVEconomist economist, Player teleporterPlayer, Player teleportee, String toWorld, double price, Material currency) {
+    private void sendTeleportPaymentMessage(MVEconomist economist, Player teleporterPlayer, Player teleportee, String toWorld, double price, Material currency) {
         price = Math.abs(price);
         if (teleporterPlayer.equals(teleportee)) {
             teleporterPlayer.sendMessage("You were " + (price > 0D ? "charged " : "given ") + economist.formatPrice(price, currency) + " for teleporting to " + toWorld);
@@ -249,7 +251,7 @@ public class PermissionTools {
                     teleporter.sendMessage("You don't have access to go to " + toWorld.getColoredWorldString() + " from " + fromWorld.getColoredWorldString());
                 } else {
                     teleporter.sendMessage("You don't have access to send " + teleportee.getName() + " from "
-                         + fromWorld.getColoredWorldString() + " to " + toWorld.getColoredWorldString());
+                            + fromWorld.getColoredWorldString() + " to " + toWorld.getColoredWorldString());
                 }
                 return false;
             }
@@ -260,7 +262,7 @@ public class PermissionTools {
     /**
      * Checks to see if a player can bypass the player limit.
      *
-     * @param toWorld The world travelling to.
+     * @param toWorld    The world travelling to.
      * @param teleporter The player that initiated the teleport.
      * @param teleportee The player travelling.
      * @return True if they can bypass the player limit.
@@ -286,7 +288,7 @@ public class PermissionTools {
     /**
      * Checks to see if a player should bypass game mode restrictions.
      *
-     * @param toWorld world travelling to.
+     * @param toWorld    world travelling to.
      * @param teleportee player travelling.
      * @return True if they should bypass restrictions
      */

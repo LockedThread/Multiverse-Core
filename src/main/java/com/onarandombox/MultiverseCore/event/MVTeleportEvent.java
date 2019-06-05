@@ -9,7 +9,6 @@ package com.onarandombox.MultiverseCore.event;
 
 import com.onarandombox.MultiverseCore.api.MVDestination;
 import com.onarandombox.MultiverseCore.api.SafeTTeleporter;
-
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +20,11 @@ import org.bukkit.event.HandlerList;
  * Event that gets called when a player use the /mvtp command.
  */
 public class MVTeleportEvent extends Event implements Cancellable {
-    private Player teleportee;
-    private CommandSender teleporter;
-    private MVDestination dest;
-    private boolean useSafeTeleport;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private final Player teleportee;
+    private final CommandSender teleporter;
+    private final MVDestination dest;
+    private final boolean useSafeTeleport;
     private boolean isCancelled;
 
     public MVTeleportEvent(MVDestination dest, Player teleportee, CommandSender teleporter, boolean safeTeleport) {
@@ -34,21 +34,20 @@ public class MVTeleportEvent extends Event implements Cancellable {
         this.useSafeTeleport = safeTeleport;
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    /**
+     * Gets the handler list. This is required by the event system.
+     *
+     * @return A list of HANDLERS.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    /**
-     * Gets the handler list. This is required by the event system.
-     * @return A list of HANDLERS.
-     */
-    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
@@ -90,6 +89,7 @@ public class MVTeleportEvent extends Event implements Cancellable {
 
     /**
      * Looks if this {@link MVTeleportEvent} is using the {@link SafeTTeleporter}.
+     *
      * @return True if this {@link MVTeleportEvent} is using the {@link SafeTTeleporter}.
      */
     public boolean isUsingSafeTTeleporter() {
